@@ -3,6 +3,6 @@ python:
   - "2.7"
 
 script:
-   - .travis/flake8
+   - .travis/run-flake8
 
 
