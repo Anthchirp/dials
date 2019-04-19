@@ -6,4 +6,6 @@ git rev-parse $TRAVIS_BRANCH
 echo HEAD:
 git rev-parse HEAD
 
-git diff --name-only --diff-filter=AM HEAD...$TRAVIS_BRANCH
+CHANGED_FILES=$(git diff --name-only --diff-filter=AM $TRAVIS_BRANCH...HEAD | grep "\.py$")
+echo Testing changed files:
+echo $CHANGED_FILES
