@@ -3,9 +3,6 @@ python:
   - "2.7"
 
 script:
-   # Parallel builds do not work. Only spend at most 40 minutes on a build.
-   # This allows incremental building, so if the build can't be finished within the allotted time
-   # it will be resumed from that point in the next build.
-   - .travis/list-modified-files
+   - .travis/flake8
 
 
