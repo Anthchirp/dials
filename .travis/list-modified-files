@@ -1,3 +1,9 @@
 #!/bin/bash
 
+echo Travis branch: $TRAVIS_BRANCH
+echo TB:
+git rev-parse $TRAVIS_BRANCH
+echo HEAD:
+git rev-parse HEAD
+
 git diff --name-only --diff-filter=AM HEAD...$TRAVIS_BRANCH
