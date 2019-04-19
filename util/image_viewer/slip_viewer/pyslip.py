@@ -9,9 +9,6 @@ Well, in the OpenStreetMap world[1], a 'slippy map' is a browser map view
 served by a tile server that can be panned and zoomed in the same way as
 popularised by Google maps.  Such a map feels 'slippery', I guess.
 
-Rather than 'slippy' I went for the slightly more formal 'pySlip' since the
-thing is written in Python and therefore must have the obligatory 'py' prefix.
-
 Even though this was originally written for a geographical application, the
 underlying system only assumes a cartesian 2D coordinate system.  So pySlip
 could be used to present a game map, 2D CAD view, or whatever.  The major
