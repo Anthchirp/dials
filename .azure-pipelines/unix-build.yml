@@ -1,0 +1,17 @@
+# Script for building CCTBX on linux and macOS
+#
+# Variables:
+#   PYTHON_VERSION: py27, py36
+#   OS: linux-64, osx-64
+
+steps:
+
+- checkout: self
+  path: ./modules/dials
+
+- script: |
+    echo I am here:
+    pwd
+    echo This is what lives here:
+    ls -la
+  displayName: Some basic scripting
