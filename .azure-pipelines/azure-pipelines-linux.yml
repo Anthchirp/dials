@@ -52,5 +52,4 @@ jobs:
     condition: eq('${{ parameters.distribution }}', 'ubuntu')
 
   # build
-  - template: ./unix-install-miniconda.yml
   - template: ./unix-build.yml

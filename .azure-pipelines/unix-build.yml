@@ -10,6 +10,22 @@ steps:
   path: ./modules/dials
 
 - script: |
+    python modules/dials/bootstrap.py update
+  displayName: Update sources
+
+- script: |
+    python modules/dials/bootstrap.py base
+  displayName: Installing base environment
+
+- script: |
+    python modules/dials/bootstrap.py build
+  displayName: Build
+
+- script: |
+    python modules/dials/bootstrap.py test
+  displayName: Run tests
+
+- script: |
     echo I am here:
     pwd
     echo This is what lives here:
