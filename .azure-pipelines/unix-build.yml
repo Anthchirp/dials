@@ -7,7 +7,7 @@
 steps:
 
 - checkout: self
-  path: ./modules/dials
+  path: $(Pipeline.Workspace)/s/modules/dials
 
 - script: |
     echo I am here:
@@ -15,6 +15,7 @@ steps:
     echo This is what lives here:
     ls -la
   displayName: Some basic scripting
+  path: $(Pipeline.Workspace)/s
 
 - script: |
     python modules/dials/bootstrap.py update
