@@ -10,6 +10,13 @@ steps:
   path: ./modules/dials
 
 - script: |
+    echo I am here:
+    pwd
+    echo This is what lives here:
+    ls -la
+  displayName: Some basic scripting
+
+- script: |
     python modules/dials/bootstrap.py update
   displayName: Update sources
 
@@ -25,9 +32,3 @@ steps:
     python modules/dials/bootstrap.py test
   displayName: Run tests
 
-- script: |
-    echo I am here:
-    pwd
-    echo This is what lives here:
-    ls -la
-  displayName: Some basic scripting
