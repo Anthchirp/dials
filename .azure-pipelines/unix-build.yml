@@ -15,11 +15,12 @@ steps:
     echo This is what lives here:
     ls -la
   displayName: Some basic scripting
-  path: $(Pipeline.Workspace)/s
+  workingDirectory: $(Pipeline.Workspace)/s
 
 - script: |
     python modules/dials/bootstrap.py update
   displayName: Update sources
+  workingDirectory: $(Pipeline.Workspace)/s
 
 - script: |
     python modules/dials/bootstrap.py base
