@@ -14,24 +14,59 @@ steps:
     pwd
     echo This is what lives here:
     ls -la
-    find .
+    ls -la *
   displayName: Some basic scripting
   workingDirectory: $(Pipeline.Workspace)
 
 - script: |
-    python modules/dials/bootstrap.py update
+    python modules/dials/installer/bootstrap.py update
   displayName: Update sources
   workingDirectory: $(Pipeline.Workspace)
 
 - script: |
-    python modules/dials/bootstrap.py base
+    echo I am here:
+    pwd
+    echo This is what lives here:
+    ls -la
+    ls -la *
+  displayName: Some basic scripting
+  workingDirectory: $(Pipeline.Workspace)
+
+- script: |
+    python modules/dials/installer/bootstrap.py base
   displayName: Installing base environment
 
 - script: |
-    python modules/dials/bootstrap.py build
+    echo I am here:
+    pwd
+    echo This is what lives here:
+    ls -la
+    ls -la *
+  displayName: Some basic scripting
+  workingDirectory: $(Pipeline.Workspace)
+
+- script: |
+    python modules/dials/installer/bootstrap.py build
   displayName: Build
 
 - script: |
-    python modules/dials/bootstrap.py test
+    echo I am here:
+    pwd
+    echo This is what lives here:
+    ls -la
+    ls -la *
+  displayName: Some basic scripting
+  workingDirectory: $(Pipeline.Workspace)
+
+- script: |
+    python modules/dials/installer/bootstrap.py test
   displayName: Run tests
 
+- script: |
+    echo I am here:
+    pwd
+    echo This is what lives here:
+    ls -la
+    ls -la *
+  displayName: Some basic scripting
+  workingDirectory: $(Pipeline.Workspace)
