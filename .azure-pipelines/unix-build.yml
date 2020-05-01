@@ -61,7 +61,7 @@ steps:
   workingDirectory: $(Pipeline.Workspace)
 
 - script: |
-    python modules/dials/installer/bootstrap.py test
+    python modules/dials/installer/bootstrap.py tests
   displayName: Run tests
   workingDirectory: $(Pipeline.Workspace)
 
