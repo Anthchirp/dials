@@ -35,6 +35,7 @@ steps:
 - script: |
     python modules/dials/installer/bootstrap.py base
   displayName: Installing base environment
+  workingDirectory: $(Pipeline.Workspace)
 
 - script: |
     echo I am here:
@@ -48,6 +49,7 @@ steps:
 - script: |
     python modules/dials/installer/bootstrap.py build
   displayName: Build
+  workingDirectory: $(Pipeline.Workspace)
 
 - script: |
     echo I am here:
@@ -61,6 +63,7 @@ steps:
 - script: |
     python modules/dials/installer/bootstrap.py test
   displayName: Run tests
+  workingDirectory: $(Pipeline.Workspace)
 
 - script: |
     echo I am here:
