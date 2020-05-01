@@ -14,6 +14,7 @@ steps:
     pwd
     echo This is what lives here:
     ls -la
+    find .
   displayName: Some basic scripting
   workingDirectory: $(Pipeline.Workspace)
 
