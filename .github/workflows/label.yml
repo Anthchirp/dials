@@ -1,7 +1,7 @@
 # This workflow will check pull requests for merge conflicts and
 # automatically add and remove a relevant label
 
-name: Label pull request conflicts
+name: Label pull request merge conflicts
 on:
   # So that PRs touching the same files as the push are updated
   push:
@@ -10,7 +10,7 @@ on:
     types: [synchronize]
 
 jobs:
-  label:
+  label-conflicts:
 
     runs-on: ubuntu-latest
 
@@ -19,4 +19,4 @@ jobs:
       uses: eps1lon/actions-label-merge-conflict@v1.2.3
       with:
         dirtyLabel: "PR: merge conflicts"
-        repo-token: "${{ secrets.GITHUB_TOKEN }}"
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
