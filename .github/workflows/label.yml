@@ -19,4 +19,5 @@ jobs:
       uses: eps1lon/actions-label-merge-conflict@v1.2.3
       with:
         dirtyLabel: "PR: merge conflicts"
+        removeOnDirtyLabel: "PR: ready to ship"
         repoToken: ${{ secrets.GITHUB_TOKEN }}
