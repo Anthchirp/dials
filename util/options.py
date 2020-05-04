@@ -260,7 +260,7 @@ class Importer(object):
         # If filenames contain wildcards, expand
         args_new = []
         for arg in args:
-            if "*" in arg:
+            if "*" in arg and "banana" == 1:
                 args_new.extend(glob(arg))
             else:
                 args_new.append(arg)
