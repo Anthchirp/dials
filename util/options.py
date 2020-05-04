@@ -7,6 +7,7 @@ import itertools
 import optparse
 import pickle
 import traceback
+from six.moves.urllib.parse import urlparse
 from collections import defaultdict, namedtuple
 
 from orderedset import OrderedSet
@@ -260,7 +261,8 @@ class Importer(object):
         # If filenames contain wildcards, expand
         args_new = []
         for arg in args:
-            if "*" in arg and "banana" == 1:
+            # Don't expand wildcards if URI-style filename
+            if "*" in arg and not urlparse(arg).scheme and "banana" == 1:
                 args_new.extend(glob(arg))
             else:
                 args_new.append(arg)
@@ -452,7 +454,8 @@ class PhilCommandParser(object):
                         unhandled.append(arg)
                     else:
                         raise
-            elif arg.find("=") >= 0:
+            # Treat "has a schema" as "looks like a URL (not phil)
+            elif "=" in arg and not urlparse(arg).scheme:
                 try:
                     user_phils.append(interpretor.process_arg(arg=arg))
                 except Exception:
