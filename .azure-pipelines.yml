@@ -1,7 +1,7 @@
 # Templates for linux, macOS, and Windows
 # Based on approach from conda-forge
 
-parameters:
+variables:
   CACHE_VERSION: 20200520
 
 jobs:
