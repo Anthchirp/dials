@@ -22,13 +22,6 @@ jobs:
 #   options: "--name ci-container -v /usr/bin/docker:/tmp/docker:ro"
 #
   steps:
-  - script: |
-      echo ohai $(Date:YYYY) $(Date:W)
-      echo maybe: $[format('{0:yyyyMMdd}', pipeline.startTime)]
-      echo $[format('{0:yyyyMMdd}', pipeline.startTime)]
-      echo $(pipeline.startTime)
-    displayName: some random test $[format('{0:yyyyMMdd}', pipeline.startTime)]
-
 # # https://github.com/ApexAI/performance_test/blob/master/azure-pipelines.yml#L9-L17
 #
 # # centos setup
@@ -57,4 +50,4 @@ jobs:
 #   condition: eq('${{ parameters.distribution }}', 'ubuntu')
 
   # build
-#  - template: ./unix-build.yml
+  - template: ./unix-build.yml

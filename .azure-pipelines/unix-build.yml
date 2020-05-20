@@ -6,17 +6,21 @@
 
 steps:
 
+- script: |
+    echo "##vso[task.setvariable variable=CURRENT_WEEK]$(date +%W)"
+  displayName: Prepare weekly cache reset
+
 - checkout: self
   path: ./dials-checkout
 
 - task: Cache@2
   inputs:
-    key: '"repositories" | "$(CACHE_VERSION)" | installer/bootstrap.py | "$(Build.SourceBranch)"'
+    key: '"repositories" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | installer/bootstrap.py | "$(Build.SourceBranch)"'
     restoreKeys: |
-      "repositories" | "$(CACHE_VERSION)" | installer/bootstrap.py | "refs/heads/master"
+      "repositories" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | installer/bootstrap.py | "refs/heads/master"
     path: $(Pipeline.Workspace)/modules
     cacheHitVar: REPOSITORIES_CACHED
-  displayName: Restore repository cache
+  displayName: Restore repository cache $(Date:YYYY)
 
 - script: |
     mkdir -p modules
