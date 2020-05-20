@@ -11,7 +11,7 @@ steps:
 
 - task: Cache@2
   inputs:
-    key: 'repositories | $(CACHE_VERSION) | master'
+    key: '"repositories" | "$(CACHE_VERSION)" | "master"'
     path: $(Pipeline.Workspace)/modules
   displayName: Restore repository cache
 
@@ -38,11 +38,18 @@ steps:
   displayName: Some basic scripting
   workingDirectory: $(Pipeline.Workspace)
 
+- task: Cache@2
+  inputs:
+    key: '"base" | "$(CACHE_VERSION)" | "$(PYTHON_VERSION)" | .conda-envs/linux.txt'
+    path: $(Pipeline.Workspace)/conda_base
+  displayName: Restore base cache
+  cacheHitVar: BASE_CACHED
+
 - script: |
-    echo Installing with python version $(PYTHON_VERSION)
     python modules/dials/installer/bootstrap.py base --python $(PYTHON_VERSION)
   displayName: Installing python $(PYTHON_VERSION) base environment
   workingDirectory: $(Pipeline.Workspace)
+  condition: ne(variables.BASE_CACHED, 'true')
 
 - script: |
     echo I am here:
