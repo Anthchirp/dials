@@ -36,7 +36,19 @@ steps:
   condition: ne(variables.REPOSITORIES_CACHED, 'true')
 
 - script: |
-    echo Update cctbx/dxtbx manually
+    for repository in cctbx_project dxtbx; do
+      if [ ! -e $(Pipeline.Workspace)/modules/${repository} ]; then
+        echo Cloning ${repository} from scratch
+        git clone https://github.com/cctbx/${repository}.git --depth=1 $(Pipeline.Workspace)/modules/${repository}
+      fi
+
+      echo Checking out latest ${repository} commit
+      cd $(Pipeline.Workspace)/modules/${repository} || exit 1
+      git fetch origin master --depth=1 || exit 2
+      git checkout FETCH_HEAD || exit 3
+      echo -n "${repository} is at commit "
+      git show --oneline -s --no-abbrev-commit || exit 4
+    done
   displayName: Update cctbx/dxtbx repository
   workingDirectory: $(Pipeline.Workspace)
   condition: ne(variables.REPOSITORIES_CACHED, 'false')
