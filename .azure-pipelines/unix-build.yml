@@ -41,7 +41,7 @@ steps:
 
 - task: Cache@2
   inputs:
-    key: '"base" | "$(CACHE_VERSION)" | "$(PYTHON_VERSION)" | .conda-env'
+    key: '"base" | "$(CACHE_VERSION)" | "$(PYTHON_VERSION)" | ../../.conda-env'
     path: $(Pipeline.Workspace)/conda_base
     cacheHitVar: BASE_CACHED
   displayName: Restore base cache
