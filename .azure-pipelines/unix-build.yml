@@ -47,10 +47,24 @@ steps:
   displayName: Some basic scripting
   workingDirectory: $(Pipeline.Workspace)
 
+#- script: |
+#    python modules/dials/installer/bootstrap.py build
+#  displayName: Build
+#  workingDirectory: $(Pipeline.Workspace)
+
 - script: |
-    python modules/dials/installer/bootstrap.py build
-  displayName: Build
+    echo I am here:
+    pwd
+    echo This is what lives here:
+    ls -la
+    ls -la *
+  displayName: Some basic scripting
   workingDirectory: $(Pipeline.Workspace)
+
+#- script: |
+#    python modules/dials/installer/bootstrap.py tests
+#  displayName: Run tests
+#  workingDirectory: $(Pipeline.Workspace)
 
 - script: |
     echo I am here:
@@ -62,15 +76,19 @@ steps:
   workingDirectory: $(Pipeline.Workspace)
 
 - script: |
-    python modules/dials/installer/bootstrap.py tests
-  displayName: Run tests
-  workingDirectory: $(Pipeline.Workspace)
-
-- script: |
-    echo I am here:
-    pwd
-    echo This is what lives here:
+    echo Preparing cache
+    rm -rf modules/dials
+    for repository in cctbx_project dxtbx; do
+      if [ -e modules/${repository}/.git ]; then
+        echo Cleaning ${repository} repository
+        cd modules/${repository}
+        git reset --hard HEAD
+        git clean -dffxq
+        cd ../..
+      fi
+    done
+    tar cvf cache.tar modules
     ls -la
-    ls -la *
-  displayName: Some basic scripting
+  displayName: Preparing cache
   workingDirectory: $(Pipeline.Workspace)
+  
