@@ -26,6 +26,7 @@ steps:
 
 - script: |
     python modules/dials/installer/bootstrap.py update
+    cp modules/dials/.conda-envs/linux.txt .conda-env
   displayName: Update sources
   workingDirectory: $(Pipeline.Workspace)
 
@@ -40,7 +41,7 @@ steps:
 
 - task: Cache@2
   inputs:
-    key: '"base" | "$(CACHE_VERSION)" | "$(PYTHON_VERSION)" | .conda-envs/linux.txt'
+    key: '"base" | "$(CACHE_VERSION)" | "$(PYTHON_VERSION)" | .conda-env'
     path: $(Pipeline.Workspace)/conda_base
     cacheHitVar: BASE_CACHED
   displayName: Restore base cache
