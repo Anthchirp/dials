@@ -7,12 +7,13 @@
 steps:
 
 - checkout: self
-  path: ./modules/dials
+  path: ./dials-checkout
 
 - task: Cache@2
   inputs:
-    key: '"repositories" | "$(CACHE_VERSION)" | "master"'
+    key: '"repositories" | "$(CACHE_VERSION)" | installer/bootstrap.py '
     path: $(Pipeline.Workspace)/modules
+    cacheHitVar: REPOSITORIES_CACHED
   displayName: Restore repository cache
 
 - script: |
@@ -25,10 +26,18 @@ steps:
   workingDirectory: $(Pipeline.Workspace)
 
 - script: |
+    mkdir -p modules
+    ln ../dials-checkout modules/dials -nsf
     python modules/dials/installer/bootstrap.py update
-    cp modules/dials/.conda-envs/linux.txt .conda-env
-  displayName: Update sources
+  displayName: Update repositories using bootstrap
   workingDirectory: $(Pipeline.Workspace)
+  condition: ne(variables.REPOSITORIES_CACHED, 'true')
+
+- script: |
+    echo Update cctbx/dxtbx manually
+  displayName: Update cctbx/dxtbx repository
+  workingDirectory: $(Pipeline.Workspace)
+  condition: ne(variables.REPOSITORIES_CACHED, 'false')
 
 - script: |
     echo I am here:
@@ -41,14 +50,14 @@ steps:
 
 - task: Cache@2
   inputs:
-    key: '"base" | "$(CACHE_VERSION)" | "$(PYTHON_VERSION)" | ../../.conda-env'
+    key: '"base" | "$(CACHE_VERSION)" | "$(Agent.OS)" | "$(PYTHON_VERSION)" | .conda-envs/linux.txt'
     path: $(Pipeline.Workspace)/conda_base
     cacheHitVar: BASE_CACHED
-  displayName: Restore base cache (really)
+  displayName: Restore cached base environment
 
 - script: |
     python modules/dials/installer/bootstrap.py base --python $(PYTHON_VERSION)
-  displayName: Installing python $(PYTHON_VERSION) base environment
+  displayName: Create python $(PYTHON_VERSION) base environment
   workingDirectory: $(Pipeline.Workspace)
   condition: ne(variables.BASE_CACHED, 'true')
 
@@ -91,7 +100,6 @@ steps:
 
 - script: |
     echo Preparing cache
-    rm -rf modules/dials
     for repository in modules/*; do
       if [ -e ${repository}/.git ]; then
         echo Cleaning directory ${repository}
@@ -104,4 +112,3 @@ steps:
     ls -la modules
   displayName: Preparing cache
   workingDirectory: $(Pipeline.Workspace)
-  
