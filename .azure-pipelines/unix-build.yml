@@ -19,19 +19,10 @@ steps:
   displayName: Restore repository cache
 
 - script: |
-    echo I am here:
-    pwd
-    echo This is what lives here:
-    ls -la
-    ls -la *
-  displayName: Some basic scripting
-  workingDirectory: $(Pipeline.Workspace)
-
-- script: |
     mkdir -p modules
     ln ../dials-checkout modules/dials -nsf
     python modules/dials/installer/bootstrap.py update
-  displayName: Update repositories using bootstrap
+  displayName: Checkout repositories using bootstrap
   workingDirectory: $(Pipeline.Workspace)
   condition: ne(variables.REPOSITORIES_CACHED, 'true')
 
@@ -84,10 +75,17 @@ steps:
   displayName: Some basic scripting
   workingDirectory: $(Pipeline.Workspace)
 
-#- script: |
-#    python modules/dials/installer/bootstrap.py build
-#  displayName: Build
-#  workingDirectory: $(Pipeline.Workspace)
+- task: Cache@2
+  inputs:
+    key: '"build" | "$(CACHE_VERSION)" | "$(Agent.OS)" | "$(PYTHON_VERSION)" | installer/bootstrap.py .conda-envs/linux.txt'
+    path: $(Pipeline.Workspace)/build
+    cacheHitVar: BUILD_CACHED
+  displayName: Restore cached build
+
+- script: |
+    python modules/dials/installer/bootstrap.py build
+  displayName: Build
+  workingDirectory: $(Pipeline.Workspace)
 
 - script: |
     echo I am here:
