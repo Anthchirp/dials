@@ -47,7 +47,7 @@ steps:
     done
   displayName: Update cctbx/dxtbx repository
   workingDirectory: $(Pipeline.Workspace)
-  condition: ne(variables.REPOSITORIES_CACHED, 'false')
+  condition: eq(variables.REPOSITORIES_CACHED, 'true')
 
 - script: |
     echo I am here:
@@ -89,8 +89,16 @@ steps:
 
 - script: |
     python modules/dials/installer/bootstrap.py build
-  displayName: Build
+  displayName: Run initial DIALS build
   workingDirectory: $(Pipeline.Workspace)
+  condition: ne(variables.BUILD_CACHED, 'true')
+
+- script: |
+    . setpaths.sh
+    make reconf
+  displayName: Run incremental DIALS build
+  workingDirectory: $(Pipeline.Workspace)/build
+  condition: eq(variables.BUILD_CACHED, 'true')
 
 - script: |
     echo I am here:
@@ -102,7 +110,9 @@ steps:
   workingDirectory: $(Pipeline.Workspace)
 
 - script: |
-    python modules/dials/installer/bootstrap.py tests
+    . build/setpaths.sh
+    cd modules/dials
+    libtbx.pytest -ra -n auto -v
   displayName: Run tests
   workingDirectory: $(Pipeline.Workspace)
 
