@@ -44,7 +44,7 @@ steps:
     key: '"base" | "$(CACHE_VERSION)" | "$(PYTHON_VERSION)" | ../../.conda-env'
     path: $(Pipeline.Workspace)/conda_base
     cacheHitVar: BASE_CACHED
-  displayName: Restore base cache
+  displayName: Restore base cache (really)
 
 - script: |
     python modules/dials/installer/bootstrap.py base --python $(PYTHON_VERSION)
