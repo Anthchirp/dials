@@ -24,7 +24,10 @@ jobs:
   steps:
   - script: |
       echo ohai $(Date:YYYY) $(Date:W)
-    displayName: some random test $(Date:YYYY)
+      echo maybe: $[format('{0:yyyyMMdd}', pipeline.startTime)]
+      echo $[format('{0:yyyyMMdd}', pipeline.startTime)]
+      echo $(pipeline.startTime)
+    displayName: some random test $[format('{0:yyyyMMdd}', pipeline.startTime)]
 
 # # https://github.com/ApexAI/performance_test/blob/master/azure-pipelines.yml#L9-L17
 #
