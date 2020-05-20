@@ -77,7 +77,7 @@ steps:
 
 - task: Cache@2
   inputs:
-    key: '"build" | "$(CACHE_VERSION)" | "$(Agent.OS)" | "$(PYTHON_VERSION)" | installer/bootstrap.py .conda-envs/linux.txt'
+    key: '"build" | "$(CACHE_VERSION)" | "$(Agent.OS)" | "$(PYTHON_VERSION)" | installer/bootstrap.py | .conda-envs/linux.txt'
     path: $(Pipeline.Workspace)/build
     cacheHitVar: BUILD_CACHED
   displayName: Restore cached build
