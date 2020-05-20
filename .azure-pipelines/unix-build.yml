@@ -8,7 +8,7 @@ steps:
 
 - script: |
     echo "##vso[task.setvariable variable=CURRENT_WEEK]W$(date +%W)"
-  displayName: Prepare weekly cache reset
+  displayName: Set up cache expiration
 
 - checkout: self
   path: ./dials-checkout
@@ -48,6 +48,63 @@ steps:
   displayName: Update cctbx/dxtbx repository
   workingDirectory: $(Pipeline.Workspace)
   condition: ne(variables.REPOSITORIES_CACHED, 'false')
+
+- script: |
+    echo I am here:
+    pwd
+    echo This is what lives here:
+    ls -la
+    ls -la *
+  displayName: Some basic scripting
+  workingDirectory: $(Pipeline.Workspace)
+
+- task: Cache@2
+  inputs:
+    key: '"base" | "$(CACHE_VERSION)" | "$(Agent.OS)" | "$(PYTHON_VERSION)" | .conda-envs/linux.txt'
+    path: $(Pipeline.Workspace)/conda_base
+    cacheHitVar: BASE_CACHED
+  displayName: Restore cached base environment
+
+- script: |
+    python modules/dials/installer/bootstrap.py base --python $(PYTHON_VERSION)
+  displayName: Create python $(PYTHON_VERSION) base environment
+  workingDirectory: $(Pipeline.Workspace)
+  condition: ne(variables.BASE_CACHED, 'true')
+
+- script: |
+    echo I am here:
+    pwd
+    echo This is what lives here:
+    ls -la
+    ls -la *
+  displayName: Some basic scripting
+  workingDirectory: $(Pipeline.Workspace)
+
+- task: Cache@2
+  inputs:
+    key: '"build" | "$(CACHE_VERSION)" | "$(Agent.OS)" | "$(PYTHON_VERSION)" | installer/bootstrap.py | .conda-envs/linux.txt'
+    path: $(Pipeline.Workspace)/build
+    cacheHitVar: BUILD_CACHED
+  displayName: Restore cached build
+
+- script: |
+    python modules/dials/installer/bootstrap.py build
+  displayName: Build
+  workingDirectory: $(Pipeline.Workspace)
+
+- script: |
+    echo I am here:
+    pwd
+    echo This is what lives here:
+    ls -la
+    ls -la *
+  displayName: Some basic scripting
+  workingDirectory: $(Pipeline.Workspace)
+
+#- script: |
+#    python modules/dials/installer/bootstrap.py tests
+#  displayName: Run tests
+#  workingDirectory: $(Pipeline.Workspace)
 
 - script: |
     echo I am here:
