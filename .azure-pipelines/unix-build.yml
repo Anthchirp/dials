@@ -1,8 +1,8 @@
 # Script for building CCTBX on linux and macOS
 #
 # Variables:
-#   PYTHON_VERSION: py27, py36
-#   OS: linux-64, osx-64
+#   CACHE_VERSION: unique string
+#   PYTHON_VERSION: string in the form of "3.x"
 
 steps:
 
@@ -13,7 +13,7 @@ steps:
   inputs:
     key: 'repositories | $(CACHE_VERSION) | master'
     path: $(Pipeline.Workspace)/modules
-  displayName: Restore repository cache $(CACHE_VERSION)
+  displayName: Restore repository cache
 
 - script: |
     echo I am here:
