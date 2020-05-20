@@ -33,8 +33,9 @@ steps:
   workingDirectory: $(Pipeline.Workspace)
 
 - script: |
-    python modules/dials/installer/bootstrap.py base
-  displayName: Installing base environment
+    echo Installing with python version $(PYTHON_VERSION)
+    python modules/dials/installer/bootstrap.py base --python $(PYTHON_VERSION)
+  displayName: Installing python $(PYTHON_VERSION) base environment
   workingDirectory: $(Pipeline.Workspace)
 
 - script: |
