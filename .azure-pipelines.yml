@@ -1,6 +1,9 @@
 # Templates for linux, macOS, and Windows
 # Based on approach from conda-forge
 
+parameters:
+  CACHE_VERSION: 20200520
+
 jobs:
   - template: ./.azure-pipelines/azure-pipelines-linux.yml
     parameters:

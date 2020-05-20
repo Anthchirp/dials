@@ -9,6 +9,12 @@ steps:
 - checkout: self
   path: ./modules/dials
 
+- task: Cache@2
+  inputs:
+    key: 'repositories | $(CACHE_VERSION) | master'
+    path: $(Pipeline.Workspace)/modules
+  displayName: Restore repository cache $(CACHE_VERSION)
+
 - script: |
     echo I am here:
     pwd
@@ -78,17 +84,16 @@ steps:
 - script: |
     echo Preparing cache
     rm -rf modules/dials
-    for repository in cctbx_project dxtbx; do
-      if [ -e modules/${repository}/.git ]; then
-        echo Cleaning ${repository} repository
-        cd modules/${repository}
+    for repository in modules/*; do
+      if [ -e ${repository}/.git ]; then
+        echo Cleaning directory ${repository}
+        cd ${repository}
         git reset --hard HEAD
         git clean -dffxq
-        cd ../..
+        cd -
       fi
     done
-    tar cvf cache.tar modules
-    ls -la
+    ls -la modules
   displayName: Preparing cache
   workingDirectory: $(Pipeline.Workspace)
   
