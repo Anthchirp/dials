@@ -4,9 +4,8 @@ jobs:
     vmImage: ubuntu-latest
   dependsOn: setup
   variables:
-    - CURRENT_WEEK: $[ dependencies.setup.output['constants.CURRENT_WEEK'] ]
-    - TODAY_ISO: $[ dependencies.setup.output['constants.TODAY_ISO'] ]
-
+    CURRENT_WEEK: $[ dependencies.setup.output['constants.CURRENT_WEEK'] ]
+    TODAY_ISO: $[ dependencies.setup.output['constants.TODAY_ISO'] ]
   strategy:
     matrix:
       python36:
