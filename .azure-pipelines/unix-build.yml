@@ -83,6 +83,12 @@ steps:
   condition: eq(variables.BUILD_CACHED, 'true')
 
 - script: |
+    . setpaths.sh
+    libtbx.pip install pytest-sugar
+  displayName: Install additional packages
+  workingDirectory: $(Pipeline.Workspace)/build
+
+- script: |
     echo I am here:
     pwd
     echo This is what lives here:
