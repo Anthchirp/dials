@@ -85,51 +85,31 @@ steps:
 
 - bash: |
     set -e
-    . setpaths.sh
-    libtbx.pip install pytest-azurepipelines
+    . build/setpaths.sh
+    libtbx.conda install dials-data pytest-azurepipelines -p conda_base
   displayName: Install additional packages
-  workingDirectory: $(Pipeline.Workspace)/build
+  workingDirectory: $(Pipeline.Workspace)
 
 - bash: |
     set -e
     . build/setpaths.sh
-    echo "##vso[task.setvariable variable=DIALS_DATA_VERSION;isoutput=true]$(libtbx.pip list --format freeze | grep dials-data | head -n 1)"
+    dials.data info -v
+    echo "##vso[task.setvariable variable=DIALS_DATA_VERSION_FULL]$(dials.data info -v | grep version.full)"
+    echo "##vso[task.setvariable variable=DIALS_DATA_VERSION_MAJOR]$(dials.data info -v | grep version.major)"
+    echo "##vso[task.setvariable variable=TODAY_ISO]$(date +%Y%m%d)"
     mkdir -p data
   displayName: Find regression data version
   workingDirectory: $(Pipeline.Workspace)
 
-- task: Cache@2
-  inputs:
-    key: '"data" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | "$(DIALS_DATA_VERSION)"'
-    restoreKeys: |
-      "data" | "$(CACHE_VERSION)-$(CURRENT_WEEK)"
-    path: $(Pipeline.Workspace)/data
-  displayName: Restore regression data
-
 - script: |
     echo I am here:
     pwd
     echo This is what lives here:
     ls -la
     ls -la *
-  displayName: Some basic scripting
-  workingDirectory: $(Pipeline.Workspace)
-
-- bash: |
-    set -e
-    export DIALS_DATA=$(pwd)/data
-    . build/setpaths.sh
-    cd modules/dials
-    libtbx.pytest -ra -n auto --runslow --regression || echo "##vso[task.complete result=Failed;]Some tests failed"
-  displayName: Run tests
-  workingDirectory: $(Pipeline.Workspace)
-
-- script: |
-    echo I am here:
-    pwd
-    echo This is what lives here:
-    ls -la
-    ls -la *
+    echo ISO day: $(TODAY_ISO)
+    echo DD full: $(DIALS_DATA_VERSION_FULL)
+    echo DD major: $(DIALS_DATA_VERSION_MAJOR)
   displayName: Some basic scripting
   workingDirectory: $(Pipeline.Workspace)
 
