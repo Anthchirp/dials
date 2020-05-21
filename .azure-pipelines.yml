@@ -1,6 +1,8 @@
 variables:
   CACHE_VERSION: 20200520
 
+# ohai
+
 jobs:
   - job: setup
     pool:
