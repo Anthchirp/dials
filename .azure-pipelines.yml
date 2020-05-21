@@ -20,6 +20,9 @@ jobs:
       - bash: |
           mkdir repository
           cd repository
+          echo Repo: $(Build.Repository.Uri)
+          echo SBN: $(Build.SourceBranchName)
+          echo SB: $(Build.SourceBranch)
           git init
           git remote add origin $(Build.Repository.Uri)
           git fetch --depth 1 --no-recurse-submodules origin $(Build.SourceBranchName)
