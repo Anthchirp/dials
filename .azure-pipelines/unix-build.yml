@@ -1,10 +1,8 @@
-# Script for building CCTBX on linux and macOS
-#
 # Variables:
 #   CACHE_VERSION: unique cache identifier
 #   CURRENT_WEEK: weekly changing cache identifier
-#   TODAY_ISO: today's date in ISO format, eg. "20200531"
 #   PYTHON_VERSION: string in the form of "3.x"
+#   TODAY_ISO: today's date in ISO format, eg. "20200531"
 
 steps:
 
@@ -12,10 +10,121 @@ steps:
   path: ./dials-checkout
   displayName: Checkout $(Build.SourceBranch)
 
-- script: |
-    echo Current week: $(CURRENT_WEEK)
-    echo Today: $(TODAY_ISO)
-    echo Cache version: $(CACHE_VERSION)
-    echo Python version: $(PYTHON_VERSION)
-  displayName: Show variables
+- task: Cache@2
+  inputs:
+    key: '"repositories" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | installer/bootstrap.py | "$(TODAY_ISO)"'
+    restoreKeys: |
+      "repositories" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | installer/bootstrap.py
+    path: $(Pipeline.Workspace)/modules
+    cacheHitVar: REPOSITORIES_CACHED
+  displayName: Restore repository cache
 
+- bash: |
+    set -e
+    mkdir -p modules
+    ln ../dials-checkout modules/dials -nsf
+    python modules/dials/installer/bootstrap.py update
+  displayName: Repository checkout (initial)
+  workingDirectory: $(Pipeline.Workspace)
+  condition: eq(variables.REPOSITORIES_CACHED, 'false')
+
+- bash: |
+    set -e
+    for repository in cctbx_project dxtbx; do
+      if [ ! -e $(Pipeline.Workspace)/modules/${repository} ]; then
+        echo Cloning ${repository} from scratch
+        git clone https://github.com/cctbx/${repository}.git --depth=1 $(Pipeline.Workspace)/modules/${repository}
+      fi
+
+      echo Checking out latest ${repository} commit
+      cd $(Pipeline.Workspace)/modules/${repository} || exit 1
+      git fetch origin master --depth=1 || exit 2
+      git checkout FETCH_HEAD || exit 3
+      echo -n "${repository} is at commit "
+      git show --oneline -s --no-abbrev-commit || exit 4
+    done
+  displayName: Repository update (incremental)
+  workingDirectory: $(Pipeline.Workspace)
+  condition: ne(variables.REPOSITORIES_CACHED, 'false')
+
+- task: Cache@2
+  inputs:
+    key: '"base" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | "$(Agent.OS)" | "$(PYTHON_VERSION)" | .conda-envs/linux.txt | "$(TODAY_ISO)"'
+    restoreKeys: |
+      "base" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | "$(Agent.OS)" | "$(PYTHON_VERSION)" | .conda-envs/linux.txt
+    path: $(Pipeline.Workspace)/conda_base
+    cacheHitVar: BASE_CACHED
+  displayName: Restore environment cache
+
+- script: |
+    python modules/dials/installer/bootstrap.py base --python $(PYTHON_VERSION)
+  displayName: Create python $(PYTHON_VERSION) environment
+  workingDirectory: $(Pipeline.Workspace)
+  condition: eq(variables.BASE_CACHED, 'false')
+
+- task: Cache@2
+  inputs:
+    key: '"build" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | "$(Agent.OS)" | "$(PYTHON_VERSION)" | installer/bootstrap.py | .conda-envs/linux.txt | "$(TODAY_ISO)"'
+    restoreKeys: |
+      "build" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | "$(Agent.OS)" | "$(PYTHON_VERSION)" | installer/bootstrap.py | .conda-envs/linux.txt
+    path: $(Pipeline.Workspace)/build
+    cacheHitVar: BUILD_CACHED
+  displayName: Restore cached build
+
+- script: |
+    python modules/dials/installer/bootstrap.py build
+  displayName: DIALS build (initial)
+  workingDirectory: $(Pipeline.Workspace)
+  condition: eq(variables.BUILD_CACHED, 'false')
+
+- bash: |
+    set -e
+    . setpaths.sh
+    make reconf
+  displayName: DIALS build (incremental)
+  workingDirectory: $(Pipeline.Workspace)/build
+  condition: ne(variables.BUILD_CACHED, 'false')
+
+- bash: |
+    set -e
+    . build/setpaths.sh
+    libtbx.conda install -p conda_base -y dials-data pytest-azurepipelines
+    dials.data info -v
+    echo "##vso[task.setvariable variable=DIALS_DATA_VERSION_FULL]$(dials.data info -v | grep version.full)"
+    echo "##vso[task.setvariable variable=DIALS_DATA_VERSION_MAJOR]$(dials.data info -v | grep version.major)"
+    mkdir -p data
+  displayName: Install additional packages
+  workingDirectory: $(Pipeline.Workspace)
+
+- task: Cache@2
+  inputs:
+    key: '"data" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | "$(DIALS_DATA_VERSION_MAJOR)" | "$(TODAY_ISO)" | "$(DIALS_DATA_VERSION_FULL)"'
+    restoreKeys: |
+      "data" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | "$(DIALS_DATA_VERSION_MAJOR)" | "$(TODAY_ISO)"
+      "data" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | "$(DIALS_DATA_VERSION_MAJOR)"
+    path: $(Pipeline.Workspace)/data
+  displayName: Restore regression data cache
+
+- bash: |
+    set -e
+    export DIALS_DATA=$(pwd)/data
+    . build/setpaths.sh
+    cd modules/dials
+    libtbx.pytest -ra -n auto --runslow --regression || echo "##vso[task.complete result=Failed;]Some tests failed"
+  displayName: Run tests
+  workingDirectory: $(Pipeline.Workspace)
+
+- script: |
+    echo Preparing cache
+    for repository in modules/*; do
+      if [ -e ${repository}/.git ]; then
+        echo Cleaning directory ${repository}
+        cd ${repository}
+        git reset --hard HEAD
+        git clean -dffxq
+        cd -
+      fi
+    done
+    ls -la modules
+  displayName: Preparing cache
+  workingDirectory: $(Pipeline.Workspace)
