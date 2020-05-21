@@ -17,11 +17,15 @@ for base, _, files in os.walk("."):
         except SyntaxError as se:
             failures += 1
             print(
-                f"##vso[task.logissue type=error;sourcepath={filename};linenumber={se.lineno};columnnumber={se.offset};code=1;]SyntaxError: {se.msg}"
+                f"##vso[task.logissue type=warning;sourcepath={filename};"
+                f"linenumber={se.lineno};columnnumber={se.offset};"
+                f"code=1;]"
+                f"SyntaxError: {se.msg}"
             )
             print(" " + se.text + " " * se.offset + "^")
             print(f"SyntaxError: {se.msg} in {filename} line {se.lineno}")
             print()
 
 if failures:
-    print(f"##vso[task.complete result=Failed;]{failures} syntax error(s) found")
+    print(f"##vso[task.logissue type=error]Found {failures} syntax error(s)")
+    print(f"##vso[task.complete result=Failed;]Found {failures} syntax error(s)")
