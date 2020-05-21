@@ -97,9 +97,10 @@ steps:
 
 - task: Cache@2
   inputs:
-    key: '"data" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | "$(DIALS_DATA_VERSION)"'
+    key: '"data" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | "$(DIALS_DATA_VERSION_MAJOR)" | "$(TODAY_ISO)" | "$(DIALS_DATA_VERSION_FULL)"'
     restoreKeys: |
-      "data" | "$(CACHE_VERSION)-$(CURRENT_WEEK)"
+      "data" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | "$(DIALS_DATA_VERSION_MAJOR)" | "$(TODAY_ISO)"
+      "data" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | "$(DIALS_DATA_VERSION_MAJOR)"
     path: $(Pipeline.Workspace)/data
   displayName: Restore regression data
 
