@@ -22,6 +22,7 @@ steps:
   displayName: Restore repository cache
 
 - script: |
+    set -e
     mkdir -p modules
     ln ../dials-checkout modules/dials -nsf
     python modules/dials/installer/bootstrap.py update
@@ -30,6 +31,7 @@ steps:
   condition: ne(variables.REPOSITORIES_CACHED, 'true')
 
 - script: |
+    set -e
     for repository in cctbx_project dxtbx; do
       if [ ! -e $(Pipeline.Workspace)/modules/${repository} ]; then
         echo Cloning ${repository} from scratch
@@ -74,6 +76,7 @@ steps:
   condition: ne(variables.BUILD_CACHED, 'true')
 
 - script: |
+    set -e
     . setpaths.sh
     make reconf
   displayName: DIALS build (incremental)
@@ -81,8 +84,9 @@ steps:
   condition: eq(variables.BUILD_CACHED, 'true')
 
 - script: |
+    set -e
     . setpaths.sh
-    libtbx.pip install pytest-azurepipelines
+    libtbx.pip install pytest-azurepipelines pytest-custom_exit_code
   displayName: Install additional packages
   workingDirectory: $(Pipeline.Workspace)/build
 
@@ -96,10 +100,10 @@ steps:
   workingDirectory: $(Pipeline.Workspace)
 
 - script: |
+    set -e
     . build/setpaths.sh
     cd modules/dials
-    libtbx.pytest -ra -n auto
-    echo pytest run completed
+    libtbx.pytest -ra -n auto --suppress-tests-failed-exit-code
   displayName: Run tests
   workingDirectory: $(Pipeline.Workspace)
 
