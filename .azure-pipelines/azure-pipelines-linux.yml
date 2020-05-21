@@ -38,16 +38,14 @@ jobs:
 #   condition: eq('${{ parameters.distribution }}', 'centos')
 #
   # ubuntu setup
-  - script: |
-      /tmp/docker exec -t -u 0 ci-container \
-      sh -c "apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confold" -y install sudo"
-    displayName: Set up sudo
-    condition: eq('${{ parameters.distribution }}', 'ubuntu')
+#  - script: |
+ #     /tmp/docker exec -t -u 0 ci-container \
+#      sh -c "apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::="--force-confold" -y install sudo"
+#    displayName: Set up sudo
 
   - script: |
       sudo apt-get install -y libgl1-mesa-dev libglu1-mesa-dev
     displayName: Install dependencies
-    condition: eq('${{ parameters.distribution }}', 'ubuntu')
 
   # build
-  - template: ./unix-build.yml
+#  - template: ./unix-build.yml
