@@ -7,15 +7,22 @@ jobs:
       vmImage: ubuntu-latest
     steps:
       - checkout: none
+
+      # Use a specific Python version
+      - task: UsePythonVersion@0
+        displayName: Use Python 3.7
+        inputs:
+          versionSpec: 3.7
+
       - bash: |
-          python3 -V
+          python -V
           mkdir dials-shallow
           cd dials-shallow
           git init
           git remote add origin $(Build.Repository.Uri)
-          git fetch --depth 1 --progress --no-recurse-submodules origin $(Build.SourceBranchName)
+          git fetch --depth 1 --no-recurse-submodules origin $(Build.SourceBranchName)
           git checkout FETCH_HEAD
-          python3 -m compileall . -q | sed "s/^\*\*\* */##vso[task.logissue type=error]/"
+          python .azure-pipelines/syntax-validation.py
         displayName: Syntax validation
         workingDirectory: $(Pipeline.Workspace)
       - bash: |
