@@ -51,7 +51,7 @@ steps:
 
 - task: Cache@2
   inputs:
-    key: '"base" | "$(CACHE_VERSION)" | "$(Agent.OS)" | "$(PYTHON_VERSION)" | .conda-envs/linux.txt'
+    key: '"base" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | "$(Agent.OS)" | "$(PYTHON_VERSION)" | .conda-envs/linux.txt'
     path: $(Pipeline.Workspace)/conda_base
     cacheHitVar: BASE_CACHED
   displayName: Restore cached base environment
@@ -64,7 +64,7 @@ steps:
 
 - task: Cache@2
   inputs:
-    key: '"build" | "$(CACHE_VERSION)" | "$(Agent.OS)" | "$(PYTHON_VERSION)" | installer/bootstrap.py | .conda-envs/linux.txt'
+    key: '"build" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | "$(Agent.OS)" | "$(PYTHON_VERSION)" | installer/bootstrap.py | .conda-envs/linux.txt'
     path: $(Pipeline.Workspace)/build
     cacheHitVar: BUILD_CACHED
   displayName: Restore cached build

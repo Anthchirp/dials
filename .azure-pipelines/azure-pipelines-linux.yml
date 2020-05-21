@@ -48,4 +48,4 @@ jobs:
     displayName: Install dependencies
 
   # build
-#  - template: ./unix-build.yml
+  - template: ./unix-build.yml
