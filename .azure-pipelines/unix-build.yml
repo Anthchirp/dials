@@ -21,7 +21,7 @@ steps:
     cacheHitVar: REPOSITORIES_CACHED
   displayName: Restore repository cache
 
-- script: |
+- bash: |
     set -e
     mkdir -p modules
     ln ../dials-checkout modules/dials -nsf
@@ -30,7 +30,7 @@ steps:
   workingDirectory: $(Pipeline.Workspace)
   condition: ne(variables.REPOSITORIES_CACHED, 'true')
 
-- script: |
+- bash: |
     set -e
     for repository in cctbx_project dxtbx; do
       if [ ! -e $(Pipeline.Workspace)/modules/${repository} ]; then
@@ -75,7 +75,7 @@ steps:
   workingDirectory: $(Pipeline.Workspace)
   condition: ne(variables.BUILD_CACHED, 'true')
 
-- script: |
+- bash: |
     set -e
     . setpaths.sh
     make reconf
@@ -83,7 +83,7 @@ steps:
   workingDirectory: $(Pipeline.Workspace)/build
   condition: eq(variables.BUILD_CACHED, 'true')
 
-- script: |
+- bash: |
     set -e
     . setpaths.sh
     libtbx.pip install pytest-azurepipelines pytest-custom_exit_code
@@ -103,13 +103,7 @@ steps:
     set -e
     . build/setpaths.sh
     cd modules/dials
-    libtbx.pytest -ra -n auto test/test_scitbx.py || {
-      if [ $? -eq 1 ]; then
-        echo "##vso[task.complete result=SucceededWithIssues;]Some tests failed"
-      else
-        exit $?
-      fi
-    }
+    libtbx.pytest -ra -n auto test/test_scitbx.py || echo "##vso[task.complete result=Failed;]Some tests failed"
   displayName: Run tests
   workingDirectory: $(Pipeline.Workspace)
 
