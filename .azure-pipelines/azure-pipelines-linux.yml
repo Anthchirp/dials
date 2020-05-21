@@ -23,6 +23,14 @@ jobs:
   - script: |
       echo Current week: ${{ parameters.CURRENT_WEEK }}
       echo Today: ${{ parameters.TODAY_ISO }}
+      echo Current week: ${{ parameters['CURRENT_WEEK'] }}
+      echo Today: ${{ parameters['TODAY_ISO'] }}
+      echo Current week: $(parameters.CURRENT_WEEK)
+      echo Today: $(parameters.TODAY_ISO)
+      echo Current week: $(CURRENT_WEEK)
+      echo Today: $(TODAY_ISO)
+      echo Current week: $CURRENT_WEEK
+      echo Today: $TODAY_ISO
     displayName: Show variables
 
 #  - script: |

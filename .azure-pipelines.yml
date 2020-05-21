@@ -16,6 +16,6 @@ jobs:
   - template: ./.azure-pipelines/azure-pipelines-linux.yml
     parameters:
       CURRENT_WEEK: $(CURRENT_WEEK)
-      TODAY_ISO: $(TODAY_ISO)
+      TODAY_ISO: THISISTODAY
 #  - template: ./.azure-pipelines/azure-pipelines-osx.yml
 #  - template: ./.azure-pipelines/azure-pipelines-win.yml
