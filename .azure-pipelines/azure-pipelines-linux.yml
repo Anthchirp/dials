@@ -7,10 +7,10 @@ jobs:
     CURRENT_WEEK: $[ dependencies.setup.outputs['constants.CURRENT_WEEK'] ]
     TODAY_ISO: $[ dependencies.setup.outputs['constants.TODAY_ISO'] ]
 
-#  strategy:
-#    matrix:
-#      python36:
-#        PYTHON_VERSION: 3.6
+  strategy:
+    matrix:
+      python36:
+        PYTHON_VERSION: 3.6
 #     python37:
 #       PYTHON_VERSION: 3.7
 #     python38:
@@ -23,6 +23,8 @@ jobs:
       echo Today: $(TODAY_ISO)
       echo Current week: $CURRENT_WEEK
       echo Today: $TODAY_ISO
+      echo Cache version: $(CACHE_VERSION)
+      echo Cache version: $CACHE_VERSION
     displayName: Show variables
 
 #  - script: |
