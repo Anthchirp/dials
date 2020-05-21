@@ -16,9 +16,7 @@ steps:
 
 - task: Cache@2
   inputs:
-    key: '"repositories" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | installer/bootstrap.py | "$(Build.SourceBranch)"'
-    restoreKeys: |
-      "repositories" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | installer/bootstrap.py | "refs/heads/master"
+    key: '"repositories" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | installer/bootstrap.py'
     path: $(Pipeline.Workspace)/modules
     cacheHitVar: REPOSITORIES_CACHED
   displayName: Restore repository cache
