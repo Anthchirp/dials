@@ -1,14 +1,12 @@
-parameters:
-- name: 'CURRENT_WEEK'
-  type: string
-- name: 'TODAY_ISO'
-  type: string
-
 jobs:
 - job: linux
   pool:
     vmImage: ubuntu-latest
   dependsOn: setup
+  variables:
+    CURRENT_WEEK1: $[ dependencies.setup.outputs['constants.CURRENT_WEEK'] ]
+    CURRENT_WEEK2: $[ dependencies.setup.outputs['CURRENT_WEEK'] ]
+
 #  strategy:
 #    matrix:
 #      python36:
@@ -29,6 +27,10 @@ jobs:
       echo Today: $(parameters.TODAY_ISO)
       echo Current week: $(CURRENT_WEEK)
       echo Today: $(TODAY_ISO)
+      echo Current week: $(CURRENT_WEEK1)
+      echo Current week: $(CURRENT_WEEK2)
+      echo more 1: $[ dependencies.setup.outputs['constants.CURRENT_WEEK'] ]
+      echo more 2: $[ dependencies.setup.outputs['CURRENT_WEEK'] ]
       echo Current week: $CURRENT_WEEK
       echo Today: $TODAY_ISO
     displayName: Show variables
