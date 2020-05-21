@@ -86,7 +86,8 @@ steps:
 - bash: |
     set -e
     . build/setpaths.sh
-    libtbx.conda install dials-data pytest-azurepipelines -p conda_base
+    # libtbx.conda install dials-data pytest-azurepipelines -p conda_base
+    libtbx.pip install dials-data
   displayName: Install additional packages
   workingDirectory: $(Pipeline.Workspace)
 
