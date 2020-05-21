@@ -52,11 +52,11 @@ steps:
     key: '"base" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | "$(Agent.OS)" | "$(PYTHON_VERSION)" | .conda-envs/linux.txt'
     path: $(Pipeline.Workspace)/conda_base
     cacheHitVar: BASE_CACHED
-  displayName: Restore cached base environment
+  displayName: Restore environment cache
 
 - script: |
     python modules/dials/installer/bootstrap.py base --python $(PYTHON_VERSION)
-  displayName: Create python $(PYTHON_VERSION) base environment
+  displayName: Create python $(PYTHON_VERSION) environment
   workingDirectory: $(Pipeline.Workspace)
   condition: ne(variables.BASE_CACHED, 'true')
 
