@@ -99,6 +99,7 @@ steps:
     . build/setpaths.sh
     cd modules/dials
     libtbx.pytest -ra -n auto
+    echo pytest run completed
   displayName: Run tests
   workingDirectory: $(Pipeline.Workspace)
 
