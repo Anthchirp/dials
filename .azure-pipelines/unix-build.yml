@@ -12,9 +12,9 @@ steps:
 
 - task: Cache@2
   inputs:
-    key: '"repositories" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | installer/bootstrap.py | "$(TODAY_ISO)"'
+    key: '"repositories" | "$(CACHE_VERSION)-$(CURRENT_WEEK)-B" | installer/bootstrap.py | "$(TODAY_ISO)"'
     restoreKeys: |
-      "repositories" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | installer/bootstrap.py
+      "repositories" | "$(CACHE_VERSION)-$(CURRENT_WEEK)-B" | installer/bootstrap.py
     path: $(Pipeline.Workspace)/modules
     cacheHitVar: REPOSITORIES_CACHED
   displayName: Restore repository cache
@@ -110,21 +110,25 @@ steps:
     export DIALS_DATA=$(pwd)/data
     . build/setpaths.sh
     cd modules/dials
-    libtbx.pytest -ra -n auto --runslow --regression || echo "##vso[task.complete result=Failed;]Some tests failed"
+    libtbx.pytest -ra test/test_scitbx.py || echo "##vso[task.complete result=Failed;]Some tests failed"
   displayName: Run tests
   workingDirectory: $(Pipeline.Workspace)
 
 - script: |
     echo Preparing cache
+    du -sh modules
     for repository in modules/*; do
       if [ -e ${repository}/.git ]; then
         echo Cleaning directory ${repository}
         cd ${repository}
         git reset --hard HEAD
         git clean -dffxq
+        git repack -a -d
         cd -
       fi
     done
     ls -la modules
+    du -sh modules
   displayName: Preparing cache
   workingDirectory: $(Pipeline.Workspace)
+  condition: ne(variables.REPOSITORIES_CACHED, 'true')
