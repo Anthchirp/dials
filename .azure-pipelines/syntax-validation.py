@@ -18,8 +18,7 @@ for base, _, files in os.walk("."):
             failures += 1
             print(
                 f"##vso[task.logissue type=error;sourcepath={filename};"
-                f"linenumber={se.lineno};columnnumber={se.offset};"
-                f"code=1;]"
+                f"linenumber={se.lineno};columnnumber={se.offset};]"
                 f"SyntaxError: {se.msg}"
             )
             print(" " + se.text + " " * se.offset + "^")
