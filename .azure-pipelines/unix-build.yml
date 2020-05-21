@@ -1,15 +1,12 @@
 # Script for building CCTBX on linux and macOS
 #
 # Variables:
-#   CACHE_VERSION: unique string
+#   CACHE_VERSION: unique cache identifier
+#   CURRENT_WEEK: weekly changing cache identifier
+#   TODAY_ISO: today's date in ISO format, eg. "20200531"
 #   PYTHON_VERSION: string in the form of "3.x"
 
 steps:
-
-- script: |
-    echo "##vso[task.setvariable variable=CURRENT_WEEK]W$(date +%W)"
-    echo "##vso[task.setvariable variable=TODAY_ISO]$(date +%Y%m%d)"
-  displayName: Set up cache expiration
 
 - checkout: self
   path: ./dials-checkout

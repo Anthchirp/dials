@@ -1,16 +1,17 @@
-# Templates for linux, macOS, and Windows
-# Based on approach from conda-forge
-
 variables:
   CACHE_VERSION: 20200520
 
 jobs:
+  - job: setup
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - script: |
+          echo "##vso[task.setvariable variable=CURRENT_WEEK;isOutput=true]$(date +W%W)"
+          echo "##vso[task.setvariable variable=TODAY_ISO;isOutput=true]$(date +%Y%m%d)"
+        displayName: Set up build constants
+        name: constants
+
   - template: ./.azure-pipelines/azure-pipelines-linux.yml
-    parameters:
-      distribution: centos
-      version: 7
 #  - template: ./.azure-pipelines/azure-pipelines-osx.yml
-#    parameters:
-#      vmImage: macOS-10.14
-#      xcode_version: 10.2.1
 #  - template: ./.azure-pipelines/azure-pipelines-win.yml
