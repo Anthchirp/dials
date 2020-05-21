@@ -1,0 +1,23 @@
+# This workflow will check pull requests for merge conflicts and
+# automatically add and remove a relevant label
+
+name: Label pull request merge conflicts
+on:
+  # So that PRs touching the same files as the push are updated
+  push:
+  # So that the `dirtyLabel` is removed if conflicts are resolved
+  pull_request:
+    types: [synchronize]
+
+jobs:
+  label-conflicts:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Label Conflicting Pull Requests
+      uses: eps1lon/actions-label-merge-conflict@v1.2.3
+      with:
+        dirtyLabel: "PR: merge conflicts"
+        removeOnDirtyLabel: "PR: ready to ship"
+        repoToken: ${{ secrets.GITHUB_TOKEN }}
