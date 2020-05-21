@@ -82,7 +82,7 @@ steps:
 
 - script: |
     . setpaths.sh
-    libtbx.pip install pytest-sugar
+    libtbx.pip install pytest-azurepipelines
   displayName: Install additional packages
   workingDirectory: $(Pipeline.Workspace)/build
 
