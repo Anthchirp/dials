@@ -27,7 +27,7 @@ steps:
     mkdir -p modules
     ln ../dials-checkout modules/dials -nsf
     python modules/dials/installer/bootstrap.py update
-  displayName: Checkout repositories using bootstrap
+  displayName: Repository checkout (initial)
   workingDirectory: $(Pipeline.Workspace)
   condition: ne(variables.REPOSITORIES_CACHED, 'true')
 
@@ -45,18 +45,9 @@ steps:
       echo -n "${repository} is at commit "
       git show --oneline -s --no-abbrev-commit || exit 4
     done
-  displayName: Update cctbx/dxtbx repository
+  displayName: Repository update (incremental)
   workingDirectory: $(Pipeline.Workspace)
   condition: eq(variables.REPOSITORIES_CACHED, 'true')
-
-- script: |
-    echo I am here:
-    pwd
-    echo This is what lives here:
-    ls -la
-    ls -la *
-  displayName: Some basic scripting
-  workingDirectory: $(Pipeline.Workspace)
 
 - task: Cache@2
   inputs:
@@ -71,15 +62,6 @@ steps:
   workingDirectory: $(Pipeline.Workspace)
   condition: ne(variables.BASE_CACHED, 'true')
 
-- script: |
-    echo I am here:
-    pwd
-    echo This is what lives here:
-    ls -la
-    ls -la *
-  displayName: Some basic scripting
-  workingDirectory: $(Pipeline.Workspace)
-
 - task: Cache@2
   inputs:
     key: '"build" | "$(CACHE_VERSION)" | "$(Agent.OS)" | "$(PYTHON_VERSION)" | installer/bootstrap.py | .conda-envs/linux.txt'
@@ -89,14 +71,14 @@ steps:
 
 - script: |
     python modules/dials/installer/bootstrap.py build
-  displayName: Run initial DIALS build
+  displayName: DIALS build (initial)
   workingDirectory: $(Pipeline.Workspace)
   condition: ne(variables.BUILD_CACHED, 'true')
 
 - script: |
     . setpaths.sh
     make reconf
-  displayName: Run incremental DIALS build
+  displayName: DIALS build (incremental)
   workingDirectory: $(Pipeline.Workspace)/build
   condition: eq(variables.BUILD_CACHED, 'true')
 
@@ -112,7 +94,7 @@ steps:
 - script: |
     . build/setpaths.sh
     cd modules/dials
-    libtbx.pytest -ra -n auto -v
+    libtbx.pytest -ra -n auto
   displayName: Run tests
   workingDirectory: $(Pipeline.Workspace)
 
