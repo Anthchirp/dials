@@ -6,10 +6,10 @@ jobs:
   variables:
     CURRENT_WEEK: $[ dependencies.setup.output['constants.CURRENT_WEEK'] ]
     TODAY_ISO: $[ dependencies.setup.output['constants.TODAY_ISO'] ]
-  strategy:
-    matrix:
-      python36:
-        PYTHON_VERSION: 3.6
+#  strategy:
+#    matrix:
+#      python36:
+#        PYTHON_VERSION: 3.6
 #     python37:
 #       PYTHON_VERSION: 3.7
 #     python38:
@@ -18,7 +18,12 @@ jobs:
 
   steps:
   - script: |
-      sudo apt-get install -y libgl1-mesa-dev libglu1-mesa-dev
-    displayName: Install dependencies
+      echo Current week: $(CURRENT_WEEK)
+      echo Today: $(TODAY_ISO)
+    displayName: Show variables
 
-  - template: ./unix-build.yml
+#  - script: |
+#      sudo apt-get install -y libgl1-mesa-dev libglu1-mesa-dev
+#    displayName: Install dependencies
+#
+#  - template: ./unix-build.yml

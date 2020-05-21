@@ -6,7 +6,8 @@ jobs:
     pool:
       vmImage: ubuntu-latest
     steps:
-      - script: |
+      - checkout: none
+      - bash: |
           echo "##vso[task.setvariable variable=CURRENT_WEEK;isOutput=true]$(date +W%W)"
           echo "##vso[task.setvariable variable=TODAY_ISO;isOutput=true]$(date +%Y%m%d)"
         displayName: Set up build constants
