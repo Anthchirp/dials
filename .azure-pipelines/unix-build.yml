@@ -86,9 +86,25 @@ steps:
 - bash: |
     set -e
     . setpaths.sh
-    libtbx.pip install pytest-azurepipelines pytest-custom_exit_code
+    libtbx.pip install pytest-azurepipelines
   displayName: Install additional packages
   workingDirectory: $(Pipeline.Workspace)/build
+
+- bash: |
+    set -e
+    . build/setpaths.sh
+    echo "##vso[task.setvariable variable=DIALS_DATA_VERSION;isoutput=true]$(libtbx.pip list --format freeze | grep dials-data | head -n 1)"
+    mkdir -p data
+  displayName: Find regression data version
+  workingDirectory: $(Pipeline.Workspace)
+
+- task: Cache@2
+  inputs:
+    key: '"data" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | "$(DIALS_DATA_VERSION)"'
+    restoreKeys: |
+      "data" | "$(CACHE_VERSION)-$(CURRENT_WEEK)"
+    path: $(Pipeline.Workspace)/data
+  displayName: Restore regression data
 
 - script: |
     echo I am here:
@@ -101,9 +117,10 @@ steps:
 
 - bash: |
     set -e
+    export DIALS_DATA=$(pwd)/data
     . build/setpaths.sh
     cd modules/dials
-    libtbx.pytest -ra -n auto test/test_scitbx.py || echo "##vso[task.complete result=Failed;]Some tests failed"
+    libtbx.pytest -ra -n auto --runslow --regression || echo "##vso[task.complete result=Failed;]Some tests failed"
   displayName: Run tests
   workingDirectory: $(Pipeline.Workspace)
 
