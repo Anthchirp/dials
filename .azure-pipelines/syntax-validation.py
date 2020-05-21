@@ -17,7 +17,7 @@ for base, _, files in os.walk("."):
         except SyntaxError as se:
             failures += 1
             print(
-                f"##vso[task.logissue type=warning;sourcepath={filename};"
+                f"##vso[task.logissue type=error;sourcepath={filename};"
                 f"linenumber={se.lineno};columnnumber={se.offset};"
                 f"code=1;]"
                 f"SyntaxError: {se.msg}"
@@ -27,5 +27,5 @@ for base, _, files in os.walk("."):
             print()
 
 if failures:
-    print(f"##vso[task.logissue type=error]Found {failures} syntax error(s)")
+    print(f"##vso[task.logissue type=warning]Found {failures} syntax error(s)")
     print(f"##vso[task.complete result=Failed;]Found {failures} syntax error(s)")

@@ -1,3 +1,3 @@
-print(if)
-brok = else
+print(if) # ohai
+brok = else # ohno
 
