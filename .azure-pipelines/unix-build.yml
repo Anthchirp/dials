@@ -99,11 +99,17 @@ steps:
   displayName: Some basic scripting
   workingDirectory: $(Pipeline.Workspace)
 
-- script: |
+- bash: |
     set -e
     . build/setpaths.sh
     cd modules/dials
-    libtbx.pytest -ra -n auto --suppress-tests-failed-exit-code
+    libtbx.pytest -ra -n auto test/test_scitbx.py || {
+      if [ $? -eq 1 ]; then
+        echo "##vso[task.complete result=SucceededWithIssues;]Some tests failed"
+      else
+        exit $?
+      fi
+    }
   displayName: Run tests
   workingDirectory: $(Pipeline.Workspace)
 
