@@ -8,6 +8,7 @@ steps:
 
 - script: |
     echo "##vso[task.setvariable variable=CURRENT_WEEK]W$(date +%W)"
+    echo "##vso[task.setvariable variable=TODAY_ISO]$(date +%Y%m%d)"
   displayName: Set up cache expiration
 
 - checkout: self
@@ -16,7 +17,9 @@ steps:
 
 - task: Cache@2
   inputs:
-    key: '"repositories" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | installer/bootstrap.py'
+    key: '"repositories" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | installer/bootstrap.py | "$(TODAY_ISO)"'
+    restoreKeys: |
+      "repositories" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | installer/bootstrap.py
     path: $(Pipeline.Workspace)/modules
     cacheHitVar: REPOSITORIES_CACHED
   displayName: Restore repository cache
@@ -51,7 +54,9 @@ steps:
 
 - task: Cache@2
   inputs:
-    key: '"base" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | "$(Agent.OS)" | "$(PYTHON_VERSION)" | .conda-envs/linux.txt'
+    key: '"base" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | "$(Agent.OS)" | "$(PYTHON_VERSION)" | .conda-envs/linux.txt | "$(TODAY_ISO)"'
+    restoreKeys: |
+      "base" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | "$(Agent.OS)" | "$(PYTHON_VERSION)" | .conda-envs/linux.txt
     path: $(Pipeline.Workspace)/conda_base
     cacheHitVar: BASE_CACHED
   displayName: Restore environment cache
@@ -64,7 +69,9 @@ steps:
 
 - task: Cache@2
   inputs:
-    key: '"build" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | "$(Agent.OS)" | "$(PYTHON_VERSION)" | installer/bootstrap.py | .conda-envs/linux.txt'
+    key: '"build" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | "$(Agent.OS)" | "$(PYTHON_VERSION)" | installer/bootstrap.py | .conda-envs/linux.txt | "$(TODAY_ISO)"'
+    restoreKeys: |
+      "build" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | "$(Agent.OS)" | "$(PYTHON_VERSION)" | installer/bootstrap.py | .conda-envs/linux.txt
     path: $(Pipeline.Workspace)/build
     cacheHitVar: BUILD_CACHED
   displayName: Restore cached build
@@ -86,11 +93,10 @@ steps:
 - bash: |
     set -e
     . build/setpaths.sh
-    libtbx.pip install --upgrade dials-data pytest-azurepipelines
+    libtbx.conda install -p conda_base -y dials-data pytest-azurepipelines
     dials.data info -v
     echo "##vso[task.setvariable variable=DIALS_DATA_VERSION_FULL]$(dials.data info -v | grep version.full)"
     echo "##vso[task.setvariable variable=DIALS_DATA_VERSION_MAJOR]$(dials.data info -v | grep version.major)"
-    echo "##vso[task.setvariable variable=TODAY_ISO]$(date +%Y%m%d)"
     mkdir -p data
   displayName: Install additional packages
   workingDirectory: $(Pipeline.Workspace)
@@ -102,7 +108,7 @@ steps:
       "data" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | "$(DIALS_DATA_VERSION_MAJOR)" | "$(TODAY_ISO)"
       "data" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | "$(DIALS_DATA_VERSION_MAJOR)"
     path: $(Pipeline.Workspace)/data
-  displayName: Restore regression data
+  displayName: Restore regression data cache
 
 - script: |
     echo I am here:
