@@ -8,16 +8,16 @@ jobs:
     steps:
       - checkout: none
 
-      # Use a specific Python version
+      # Use this version of Python for syntax validation
       - task: UsePythonVersion@0
-        displayName: Use Python 3.7
+        displayName: Set up python
         inputs:
           versionSpec: 3.7
 
+      # Download shallow clone and run syntax validation
       - bash: |
-          python -V
-          mkdir dials-shallow
-          cd dials-shallow
+          mkdir repository
+          cd repository
           git init
           git remote add origin $(Build.Repository.Uri)
           git fetch --depth 1 --no-recurse-submodules origin $(Build.SourceBranchName)
@@ -25,12 +25,14 @@ jobs:
           python .azure-pipelines/syntax-validation.py
         displayName: Syntax validation
         workingDirectory: $(Pipeline.Workspace)
+
+      # Set up date constants for caching in further build jobs
       - bash: |
           echo "##vso[task.setvariable variable=CURRENT_WEEK;isOutput=true]$(date +W%W)"
           echo "##vso[task.setvariable variable=TODAY_ISO;isOutput=true]$(date +%Y%m%d)"
         displayName: Set up build constants
         name: constants
 
-#  - template: ./.azure-pipelines/azure-pipelines-linux.yml
-#  - template: ./.azure-pipelines/azure-pipelines-osx.yml
-#  - template: ./.azure-pipelines/azure-pipelines-win.yml
+  - template: ./.azure-pipelines/azure-pipelines-linux.yml
+# - template: ./.azure-pipelines/azure-pipelines-osx.yml
+# - template: ./.azure-pipelines/azure-pipelines-win.yml
