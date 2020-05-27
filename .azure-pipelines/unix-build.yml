@@ -201,7 +201,10 @@ steps:
   workingDirectory: $(Pipeline.Workspace)
 
 - bash: |
-    rm -rf tests
+    if [ -d tests ]; then
+      du -sh tests/*
+      rm -rf tests
+    fi
   displayName: Clean up droppings
   workingDirectory: $(Pipeline.Workspace)
 
