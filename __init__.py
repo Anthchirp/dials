@@ -12,6 +12,8 @@ if sys.version_info.major == 2:
     )
 
 logging.getLogger("dials").addHandler(logging.NullHandler())
+import sys
+import subprocess
 
 # Intercept easy_mp exceptions to extract stack traces before they are lost at
 # the libtbx process boundary/the easy_mp API. In the case of a subprocess
