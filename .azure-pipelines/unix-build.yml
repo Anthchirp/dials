@@ -18,9 +18,9 @@ steps:
 # Flush the cache once a week and whenever the bootstrap script is modified
 - task: Cache@2
   inputs:
-    key: '"repositories" | "$(Pipeline.Workspace)" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | installer/bootstrap.py | "$(TODAY_ISO)"'
+    key: '"repositories" | "$(Agent.Version)" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | installer/bootstrap.py | "$(TODAY_ISO)"'
     restoreKeys: |
-      "repositories" | "$(Pipeline.Workspace)" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | installer/bootstrap.py
+      "repositories" | "$(Agent.Version)" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | installer/bootstrap.py
     path: $(Pipeline.Workspace)/modules
     cacheHitVar: REPOSITORIES_CACHED
   displayName: Restore repository cache
