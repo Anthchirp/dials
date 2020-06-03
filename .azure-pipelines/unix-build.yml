@@ -6,23 +6,46 @@
 
 steps:
 
-- checkout: none
+# Obtain a shallow clone of the DIALS repository.
+# DIALS will not be able to report proper version numbers
+- checkout: self
+  path: ./dials-checkout
+  fetchDepth: 1
+  displayName: Checkout $(Build.SourceBranch)
+
+# Get all other source repositories from cache if available
+# Allow day-to-day incremental cache updates
+# Flush the cache once a week and whenever the bootstrap script is modified
+- task: Cache@2
+  inputs:
+    key: '"repositories" | "$(Pipeline.Workspace)" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | installer/bootstrap.py | "$(TODAY_ISO)"'
+    restoreKeys: |
+      "repositories" | "$(Pipeline.Workspace)" | "$(CACHE_VERSION)-$(CURRENT_WEEK)" | installer/bootstrap.py
+    path: $(Pipeline.Workspace)/modules
+    cacheHitVar: REPOSITORIES_CACHED
+  displayName: Restore repository cache
 
 # If other source repositories are not cached then download
 # them using the bootstrap script
 - bash: |
-    pwd
-    echo -----
-    ls -la
-    echo -----
-    ls -la /Users
-    echo -----
-    ls -la /Users/runner
-    echo -----
-    ls -la /Users/runner/runners
-    echo -----
-    mkdir /Users/runner/runners/test
-    ls -la /Users/runner/runners
-    echo -----
-  displayName: runner experiments
+    set -e
+    mkdir -p modules
+    ln -nsf ../dials-checkout modules/dials
+    python modules/dials/installer/bootstrap.py update
+  displayName: Repository checkout (initial)
   workingDirectory: $(Pipeline.Workspace)
+  condition: eq(variables.REPOSITORIES_CACHED, 'false')
+
+# Update the cctbx_project and dxtbx repositories now,
+# unless they were just freshly cloned
+- bash: |
+    set -e
+    for repository in cctbx_project dxtbx; do
+      echo ""
+      echo "Checking out latest ${repository} commit"
+      cd $(Pipeline.Workspace)/modules/${repository}
+      git fetch origin master --depth=1
+      git checkout FETCH_HEAD
+    done
+  displayName: Repository update (incremental)
+  condition: ne(variables.REPOSITORIES_CACHED, 'false')
