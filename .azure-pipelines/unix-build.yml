@@ -30,8 +30,8 @@ steps:
 # pick up libc and friends
 - bash: |
     mkdir -p modules/lib
-    cp /usr/lib/x86_64-linux-gnu/libGL.so* modules/lib -av
-    cp /usr/lib/x86_64-linux-gnu/libGLU.so* modules/lib -av
+    cp -av /usr/lib/x86_64-linux-gnu/libGL.so* modules/lib
+    cp -av /usr/lib/x86_64-linux-gnu/libGLU.so* modules/lib
   displayName: Set up GL/GLU libraries
   workingDirectory: $(Pipeline.Workspace)
   condition: eq(variables['Agent.OS'], 'Linux')
@@ -102,8 +102,8 @@ steps:
 - bash: |
     set -e
     mkdir -p build/include
-    cp /usr/include/GL build/include -av
-    cp /usr/include/KHR build/include -av
+    cp -av /usr/include/GL build/include
+    cp -av /usr/include/KHR build/include
   displayName: Set up GL/GLU headers
   workingDirectory: $(Pipeline.Workspace)
   condition: and(eq(variables.BUILD_CACHED, 'false'),
@@ -114,7 +114,7 @@ steps:
 - bash: |
     set -e
     python modules/dials/installer/bootstrap.py build
-    cp dials build/activate -v  # ensure a copy is kept in the cache
+    cp -v dials build/activate  # ensure a copy is kept in the cache
   displayName: DIALS build (initial)
   workingDirectory: $(Pipeline.Workspace)
   condition: eq(variables.BUILD_CACHED, 'false')
@@ -123,7 +123,7 @@ steps:
 # do an incremental build
 - bash: |
     set -e
-    cp build/activate dials -v  # restore copy from the cache
+    cp -v build/activate dials  # restore copy from the cache
     . dials
     cd build
     make reconf
