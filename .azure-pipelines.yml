@@ -1,20 +1,3 @@
-variables:
-  CACHE_VERSION: 20200604
-
-schedules:
-  # nightly builds to populate caches
-  - cron: "3 0 * * Mon"
-    displayName: Weekly midnight build
-    branches:
-      include:
-      - master
-    always: true
-  - cron: "3 0 * * Tue-Sat,Sun"
-    displayName: Daily midnight build
-    branches:
-      include:
-      - master
-
 jobs:
   - job: setup
     displayName: syntax validation
@@ -75,7 +58,3 @@ jobs:
           wait
           python .azure-pipelines/flake8-validation.py
         displayName: Flake8 validation
-
-  - template: .azure-pipelines/azure-pipelines-linux.yml
-
-  - template: .azure-pipelines/azure-pipelines-mac.yml
