@@ -39,14 +39,6 @@ steps:
 # If other source repositories are not cached then download
 # them using the bootstrap script
 - powershell: |
-    pwd
-    dir
-    dir ..
-  displayName: Print some info
-  failOnStderr: true
-  workingDirectory: $(Pipeline.Workspace)
-
-- powershell: |
     New-Item -Force -ItemType Directory -Path modules
     New-Item -Force -ItemType SymbolicLink -Path modules\dials -Value dials-checkout
     python.exe modules\dials\installer\bootstrap.py update
@@ -61,9 +53,8 @@ steps:
   displayName: Print some info
   failOnStderr: true
   workingDirectory: $(Pipeline.Workspace)
-#    python modules/dials/installer/bootstrap.py update
 #  condition: eq(variables.REPOSITORIES_CACHED, 'false')
-# 
+
 # # Update the cctbx_project and dxtbx repositories now,
 # # unless they were just freshly cloned
 # - bash: |
@@ -77,7 +68,7 @@ steps:
 #     done
 #   displayName: Repository update (incremental)
 #   condition: ne(variables.REPOSITORIES_CACHED, 'false')
-# 
+
 # # Get a ready-made DIALS conda environment from cache if available
 # # Allow day-to-day incremental cache updates
 # # Flush the cache once a week and whenever the environment specification is modified
@@ -90,13 +81,13 @@ steps:
 #     path: $(Pipeline.Workspace)/conda_base
 #     cacheHitVar: BASE_CACHED
 #   displayName: Restore environment cache
-# 
-# # If the conda environment could not be loaded from cache then
-# # create a new one using the bootstrap script
-# - script: |
-#     python modules/dials/installer/bootstrap.py base --python $(PYTHON_VERSION)
-#   displayName: Create python $(PYTHON_VERSION) environment
-#   workingDirectory: $(Pipeline.Workspace)
+
+# If the conda environment could not be loaded from cache then
+# create a new one using the bootstrap script
+- script: |
+    python modules/dials/installer/bootstrap.py base --python $(PYTHON_VERSION)
+  displayName: Create python $(PYTHON_VERSION) environment
+  workingDirectory: $(Pipeline.Workspace)
 #   condition: eq(variables.BASE_CACHED, 'false')
 # 
 # # Get a ready-made DIALS build directory from cache if available
