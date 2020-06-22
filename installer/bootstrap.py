@@ -165,10 +165,9 @@ def install_conda(python):
 
     environments = get_environments()
 
-    if sys.version_info.major == 2:
-        conda_info = subprocess.check_output([conda_exe, "info", "--json"], env=clean_env)
-    else:
-        conda_info = subprocess.check_output([conda_exe, "info", "--json"], env=clean_env, encoding="latin1")
+    conda_info = subprocess.check_output([conda_exe, "info", "--json"], env=clean_env)
+    if sys.version_info.major > 2:
+        conda_info = conda_info.decode("latin-1")
     conda_info = json.loads(conda_info)
     if conda_base != os.path.realpath(conda_info["root_prefix"]):
         warnings.warn(
