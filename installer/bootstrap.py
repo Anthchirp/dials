@@ -253,7 +253,7 @@ common compilers provided by conda. Please update your version with
             " ".join(
                 [os.path.join(conda_base, "Scripts", "activate"), "base", "&&"]
                 + command_list
-            ),
+            ).replace("<", "^<").replace(">", "^>"),
         ]
     print(
         "{text} dials environment from {filename} with Python {python}".format(
