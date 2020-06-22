@@ -9,7 +9,7 @@ steps:
 # Obtain a shallow clone of the DIALS repository.
 # DIALS will not be able to report proper version numbers
 - checkout: self
-  path: ./dials-checkout
+  path: dials-checkout
   fetchDepth: 1
   displayName: Checkout $(Build.SourceBranch)
 
@@ -38,6 +38,14 @@ steps:
 # 
 # If other source repositories are not cached then download
 # them using the bootstrap script
+- powershell: |
+    pwd
+    dir
+    dir ..
+  displayName: Print some info
+  failOnStderr: true
+  workingDirectory: $(Pipeline.Workspace)
+
 - powershell: |
     pwd
     dir
