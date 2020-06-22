@@ -47,15 +47,18 @@ steps:
   workingDirectory: $(Pipeline.Workspace)
 
 - powershell: |
-    pwd
-    dir
-    dir ..
     New-Item -Force -ItemType Directory -Path modules
     New-Item -Force -ItemType SymbolicLink -Path modules\dials -Value dials-checkout
-    dir
-    dir modules
-    python.exe -V
+    python.exe modules\dials\installer\bootstrap.py update
   displayName: Repository checkout (initial)
+  failOnStderr: true
+  workingDirectory: $(Pipeline.Workspace)
+
+- powershell: |
+    ls
+    ls modules
+    pwd
+  displayName: Print some info
   failOnStderr: true
   workingDirectory: $(Pipeline.Workspace)
 #    python modules/dials/installer/bootstrap.py update
