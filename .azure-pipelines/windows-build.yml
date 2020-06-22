@@ -38,11 +38,12 @@ steps:
 # 
 # If other source repositories are not cached then download
 # them using the bootstrap script
-- powershell:
+- powershell: |
     New-Item -Force -ItemType Directory -Path modules
     New-Item -Force -ItemType SymbolicLink -Path modules\dials -Value ..\dials-checkout
     dir
     dir modules
+    python.exe -V
   displayName: Repository checkout (initial)
   failOnStderr: true
   workingDirectory: $(Pipeline.Workspace)
