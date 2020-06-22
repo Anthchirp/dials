@@ -51,7 +51,7 @@ steps:
     dir
     dir ..
     New-Item -Force -ItemType Directory -Path modules
-    New-Item -Force -ItemType SymbolicLink -Path modules\dials -Value ..\dials-checkout
+    New-Item -Force -ItemType SymbolicLink -Path modules\dials -Value dials-checkout
     dir
     dir modules
     python.exe -V
