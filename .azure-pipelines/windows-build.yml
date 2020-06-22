@@ -39,6 +39,9 @@ steps:
 # If other source repositories are not cached then download
 # them using the bootstrap script
 - powershell: |
+    pwd
+    dir
+    dir ..
     New-Item -Force -ItemType Directory -Path modules
     New-Item -Force -ItemType SymbolicLink -Path modules\dials -Value ..\dials-checkout
     dir
