@@ -36,16 +36,18 @@ steps:
 #   workingDirectory: $(Pipeline.Workspace)
 #   condition: eq(variables['Agent.OS'], 'Linux')
 # 
-# # If other source repositories are not cached then download
-# # them using the bootstrap script
-# - bash: |
-#     set -e
-#     mkdir -p modules
-#     ln -nsf ../dials-checkout modules/dials
-#     python modules/dials/installer/bootstrap.py update
-#   displayName: Repository checkout (initial)
-#   workingDirectory: $(Pipeline.Workspace)
-#   condition: eq(variables.REPOSITORIES_CACHED, 'false')
+# If other source repositories are not cached then download
+# them using the bootstrap script
+- powershell:
+    New-Item -Force -ItemType Directory -Path modules
+    New-Item -Force -ItemType SymbolicLink -Path modules\dials -Value ..\dials-checkout
+    dir
+    dir modules
+  displayName: Repository checkout (initial)
+  failOnStderr: true
+  workingDirectory: $(Pipeline.Workspace)
+#    python modules/dials/installer/bootstrap.py update
+#  condition: eq(variables.REPOSITORIES_CACHED, 'false')
 # 
 # # Update the cctbx_project and dxtbx repositories now,
 # # unless they were just freshly cloned
