@@ -5,7 +5,7 @@ conda-forge::dials-data
 conda-forge::mrcfile
 conda-forge::msgpack-python=0.6.2
 conda-forge::orderedset
-# conda-forge::procrunner>2.0.0
+conda-forge::procrunner>=2.0.0
 conda-forge::pyrtf
 
 conda-forge::alabaster
