@@ -11,18 +11,15 @@
 from __future__ import absolute_import, division, print_function
 
 import argparse
-import functools
 import json
 import multiprocessing.pool
 import os
-import random
 import re
 import shutil
 import socket as pysocket
 import stat
 import subprocess
 import sys
-import tarfile
 import threading
 import time
 import warnings
@@ -103,14 +100,12 @@ def install_miniconda(location):
     else:
         command = ["/bin/sh", filename, "-b", "-u", "-p", location]
 
-    print()
-    run_command(workdir=".", command=command, description="Installing Miniconda")
+    print("Installing Miniconda")
+    run_command(command=command, workdir=".")
 
 
 def install_conda(python):
-    print()
-
-    if python in ("3.7", "3.8"):
+    if python in ("3.7", "3.8") and not sys.platform.startswith("linux"):
         print(
             "\n",
             "*" * 80 + "\n",
@@ -169,12 +164,6 @@ def install_conda(python):
     if sys.version_info.major > 2:
         conda_info = conda_info.decode("latin-1")
     conda_info = json.loads(conda_info)
-    if conda_base != os.path.realpath(conda_info["root_prefix"]):
-        warnings.warn(
-            "Expected conda base differs:{0}!={1}".format(
-                conda_base, os.path.realpath(conda_info["root_prefix"])
-            )
-        )
     for env in environments:
         if env not in conda_info["envs"]:
             print("Consistency check:", env, "not in environments:")
@@ -188,14 +177,6 @@ environments exist and are working.
 """,
                 RuntimeWarning,
             )
-    if conda_info["conda_version"] < "4.4":
-        sys.exit(
-            """
-CCTBX programs require conda version 4.4 and greater to make use of the
-common compilers provided by conda. Please update your version with
-"conda update conda".
-"""
-        )
 
     # identify packages required for environment
     if os.name == "nt":
@@ -215,13 +196,7 @@ common compilers provided by conda. Please update your version with
             "The file {filename} is not available".format(filename=filename)
         )
 
-    python_version = tuple(int(i) for i in python.split(".", 1))
-    python_requirement = "conda-forge::python>=%d.%d,<%d.%d" % (
-        python_version[0],
-        python_version[1],
-        python_version[0],
-        python_version[1] + 1,
-    )
+    python_requirement = "conda-forge::python=%s.*" % python
 
     # make a new environment directory
     prefix = os.path.realpath("conda_base")
@@ -253,7 +228,9 @@ common compilers provided by conda. Please update your version with
             " ".join(
                 [os.path.join(conda_base, "Scripts", "activate"), "base", "&&"]
                 + command_list
-            ).replace("<", "^<").replace(">", "^>"),
+            )
+            .replace("<", "^<")
+            .replace(">", "^>"),
         ]
     print(
         "{text} dials environment from {filename} with Python {python}".format(
@@ -264,9 +241,7 @@ common compilers provided by conda. Please update your version with
         retry += 1
         try:
             run_command(
-                workdir=".",
-                command=command_list,
-                description="Installing base directory",
+                command=command_list, workdir=".",
             )
         except Exception:
             print(
@@ -318,33 +293,13 @@ ${HOME}/.conda/environments.txt.
         )
 
 
-_BUILD_DIR = "build"
-
-
-def tar_extract(workdir, archive):
-    # using tarfile module rather than unix tar command which is not platform independent
-    with tarfile.open(os.path.join(workdir, archive), errorlevel=2) as tar:
-        tar.extractall(path=workdir)
-        tarfoldername = os.path.join(
-            workdir, os.path.commonprefix(tar.getnames()).split("/")[0]
-        )
-    # take full permissions on all extracted files
-    module = os.path.join(workdir, tarfoldername)
-    for root, dirs, files in os.walk(module):
-        for fname in files:
-            full_path = os.path.join(root, fname)
-            os.chmod(
-                full_path, stat.S_IREAD | stat.S_IWRITE | stat.S_IRGRP | stat.S_IROTH
-            )
-
-
-def run_command(command, workdir=_BUILD_DIR, description=None):
-    print("===== Running in %s:" % workdir, description or " ".join(command))
-    if workdir:
-        try:
-            os.makedirs(workdir)
-        except OSError:
-            pass
+def run_command(command, workdir):
+    print("Running %s (in %s)" % (" ".join(command), workdir))
+    workdir = os.path.abspath(workdir)
+    try:
+        os.makedirs(workdir)
+    except OSError:
+        pass
     try:
         p = subprocess.Popen(args=command, cwd=workdir, env=clean_env)
     except Exception as e:
@@ -359,11 +314,30 @@ def run_command(command, workdir=_BUILD_DIR, description=None):
     try:
         p.wait()
     except KeyboardInterrupt:
-        print("\nReceived CTRL+C, trying to terminate subprocess...\n")
+        print("\nReceived CTRL+C, trying to stop subprocess...\n")
         p.terminate()
         raise
     if p.returncode:
         sys.exit("Process failed with return code %s" % p.returncode)
+
+
+def run_indirect_command(command, args):
+    print("(via conda environment) " + command)
+    if os.name == "nt":
+        command = command + ".bat"
+    else:
+        filename = os.path.join("build", "indirection.sh")
+        with open(filename, "w") as fh:
+            fh.write("#!/bin/bash\n")
+            fh.write("source %s/conda_base/etc/profile.d/conda.sh\n" % os.getcwd())
+            fh.write("conda activate %s/conda_base\n" % os.getcwd())
+            fh.write('"$@"\n')
+        mode = os.stat(filename).st_mode
+        mode |= (mode & 0o444) >> 2  # copy R bits to X
+        os.chmod(filename, mode)
+    run_command(
+        command=["./indirection.sh", command] + args, workdir="build",
+    )
 
 
 def download_to_file(url, file, quiet=False, cache=True):
@@ -805,14 +779,145 @@ REPOSITORIES = (
     "xia2/xia2",
 )
 
-###################################
-##### Base Configuration      #####
-###################################
+
+def update_sources(options):
+    if options.git_reference:
+        reference_base = os.path.abspath(os.path.expanduser(options.git_reference))
+    else:
+        if os.name == "posix" and pysocket.gethostname().endswith(".diamond.ac.uk"):
+            reference_base = (
+                "/dls/science/groups/scisoft/DIALS/repositories/git-reference"
+            )
+        else:
+            reference_base = None
+    try:
+        git_available = not subprocess.call(
+            ["git", "--version"], stdout=devnull, stderr=devnull
+        )
+    except OSError:
+        git_available = False
+
+    git_branches = dict(options.branch)
+
+    def git_fn(repository):
+        modulename = repository.split("/")[1]
+        branch = git_branches.get(modulename)
+        git_source = [
+            "git@github.com:%s.git" % repository,
+            "https://github.com/%s.git" % repository,
+            "https://github.com/%s/archive/%s.zip" % (repository, branch or "master"),
+        ]
+        return git(
+            modulename,
+            git_source,
+            branch=branch,
+            git_available=git_available,
+            reference_base=reference_base,
+        )
+
+    success = True
+    update_pool = multiprocessing.pool.ThreadPool(20)
+    try:
+        for result in update_pool.imap_unordered(git_fn, REPOSITORIES):
+            # for r in REPOSITORIES:
+            #  result = git_fn(r)
+            module, result, output = result
+            output = (result + " - " + output).replace(
+                "\n", "\n" + " " * (len(module + result) + 5)
+            )
+            if os.name == "posix" and sys.stdout.isatty():
+                if result == "OK":
+                    output = "\x1b[32m" + output + "\x1b[0m"
+                elif result == "WARNING":
+                    output = "\x1b[33m" + output + "\x1b[0m"
+                elif result == "ERROR":
+                    output = "\x1b[31m" + output + "\x1b[0m"
+                    success = False
+            print(module + ": " + output)
+    except KeyboardInterrupt:
+        update_pool.terminate()
+        sys.exit("\naborted with Ctrl+C")
+    except Exception:
+        update_pool.terminate()
+        raise
+    update_pool.close()
+    update_pool.join()
+    if not success:
+        sys.exit("\nFailed to update one or more repositories")
 
 
-class DIALSBuilder(object):
-    # Configure these cctbx packages
-    LIBTBX = [
+def run_tests():
+    dispatch_extension = ".bat" if os.name == "nt" else ""
+    print("Running dxtbx tests")
+    run_command(
+        [
+            os.path.join(
+                "..", "..", "build", "bin", "libtbx.pytest" + dispatch_extension
+            ),
+            "--regression",
+            "-n",
+            "auto",
+        ],
+        workdir=os.path.join("modules", "dxtbx"),
+    )
+    print("Running dials tests")
+    run_command(
+        [
+            os.path.join(
+                "..", "..", "build", "bin", "libtbx.pytest" + dispatch_extension
+            ),
+            "--regression",
+            "-n",
+            "auto",
+        ],
+        workdir=os.path.join("modules", "dials"),
+    )
+
+
+def refresh_build():
+    print("Running libtbx.refresh")
+    dispatch_extension = ".bat" if os.name == "nt" else ""
+    run_command(
+        [os.path.join("build", "bin", "libtbx.refresh" + dispatch_extension)],
+        workdir=".",
+    )
+
+
+def install_precommit():
+    print("Installing precommits")
+    dispatch_extension = ".bat" if os.name == "nt" else ""
+    run_command(
+        [
+            os.path.join("build", "bin", "libtbx.precommit" + dispatch_extension),
+            "install",
+        ],
+        workdir=".",
+    )
+
+
+def configure_build(config_flags):
+    if os.name == "nt":
+        conda_python = os.path.join(os.getcwd(), "conda_base", "python.exe")
+    elif sys.platform.startswith("darwin"):
+        conda_python = os.path.join(
+            "..", "conda_base", "python.app", "Contents", "MacOS", "python"
+        )
+    else:
+        conda_python = os.path.join("..", "conda_base", "bin", "python")
+
+    if not any(flag.startswith("--compiler=") for flag in config_flags):
+        config_flags.append("--compiler=conda")
+    if "--enable_cxx11" not in config_flags:
+        config_flags.append("--enable_cxx11")
+    if "--use_conda" not in config_flags:
+        config_flags.append("--use_conda")
+
+    with open("dials", "w"):
+        pass  # ensure we write a new-style environment setup script
+
+    configcmd = [
+        conda_python,
+        os.path.join("..", "modules", "cctbx_project", "libtbx", "configure.py"),
         "cctbx",
         "cbflib",
         "dxtbx",
@@ -828,277 +933,21 @@ class DIALSBuilder(object):
         "prime",
         "iota",
         "--skip_phenix_dispatchers",
-    ]
+    ] + config_flags
+    print("Setting up build directory")
+    run_command(
+        command=configcmd, workdir="build",
+    )
 
-    def __init__(self, options):
-        """Create and add all the steps."""
-        self.git_reference = options.git_reference
-        self.git_branches = dict(options.branch or [])
-        self.steps = []
-        # self.config_flags are only from the command line
-        # LIBTBX can still be used to always set flags specific to a builder
-        self.config_flags = options.config_flags or []
 
-        # Add sources
-        if "update" in options.actions:
-            self.update_sources()
-
-        # always remove .pyc files
-        self.remove_pycs()
-
-        # Build base packages
-        if "base" in options.actions:
-            install_conda(python=options.python)
-
-        # Configure, make, get revision numbers
-        if "build" in options.actions:
-            self.add_configure()
-            self.add_make()
-
-        # Tests, tests
-        if "tests" in options.actions:
-            self.add_tests()
-
-        if "build" in options.actions:
-            self.add_refresh()
-            self.add_precommit()
-
-    @staticmethod
-    def remove_pycs():
-        if not os.path.exists("modules"):
-            return
-        print("\n  removing .pyc files in %s" % os.path.join(os.getcwd(), "modules"))
-        i = 0
-        for root, dirs, files in os.walk("modules"):
-            if ".git" in dirs:
-                del dirs[dirs.index(".git")]
-            for name in files:
-                if name.endswith(".pyc"):
-                    os.remove(os.path.join(root, name))
-                    i += 1
-        print("  removed %d files" % i)
-
-    def run(self):
-        for i in self.steps:
-            result = i()
-            if result:
-                print(result)
-
-    def update_sources(self):
-        if self.git_reference:
-            reference_base = os.path.abspath(os.path.expanduser(self.git_reference))
-        else:
-            if os.name == "posix" and pysocket.gethostname().endswith(".diamond.ac.uk"):
-                reference_base = (
-                    "/dls/science/groups/scisoft/DIALS/repositories/git-reference"
-                )
-            else:
-                reference_base = None
-        try:
-            git_available = not subprocess.call(
-                ["git", "--version"], stdout=devnull, stderr=devnull
-            )
-        except OSError:
-            git_available = False
-
-        def git_fn(repository):
-            modulename = repository.split("/")[1]
-            branch = self.git_branches.get(modulename)
-            git_source = [
-                "git@github.com:%s.git" % repository,
-                "https://github.com/%s.git" % repository,
-                "https://github.com/%s/archive/%s.zip"
-                % (repository, branch or "master"),
-            ]
-            return git(
-                modulename,
-                git_source,
-                branch=branch,
-                git_available=git_available,
-                reference_base=reference_base,
-            )
-
-        success = True
-        update_pool = multiprocessing.pool.ThreadPool(20)
-        try:
-            for result in update_pool.imap_unordered(git_fn, REPOSITORIES):
-                # for r in REPOSITORIES:
-                #  result = git_fn(r)
-                module, result, output = result
-                output = (result + " - " + output).replace(
-                    "\n", "\n" + " " * (len(module + result) + 5)
-                )
-                if os.name == "posix" and sys.stdout.isatty():
-                    if result == "OK":
-                        output = "\x1b[32m" + output + "\x1b[0m"
-                    elif result == "WARNING":
-                        output = "\x1b[33m" + output + "\x1b[0m"
-                    elif result == "ERROR":
-                        output = "\x1b[31m" + output + "\x1b[0m"
-                        success = False
-                print(module + ": " + output)
-        except KeyboardInterrupt:
-            update_pool.terminate()
-            sys.exit("\naborted with Ctrl+C")
-        except Exception:
-            update_pool.terminate()
-            raise
-        update_pool.close()
-        update_pool.join()
-        if not success:
-            sys.exit("\nFailed to update one or more repositories")
-
-        msgpack = "msgpack-3.1.1.tar.gz"
-        for retry in range(5):
-            try:
-                print("Downloading msgpack:", end=" ")
-                result = download_to_file(
-                    random.choice(
-                        [
-                            "https://gitcdn.xyz/repo/dials/dependencies/dials-1.13/",
-                            "https://gitcdn.link/repo/dials/dependencies/dials-1.13/",
-                            "https://github.com/dials/dependencies/raw/dials-1.13/",
-                        ]
-                    )
-                    + msgpack,
-                    os.path.join("modules", msgpack),
-                )
-                assert result > 0 or result == -2
-            except Exception as err:
-                print("Error downloading msgpack. (%s) Retrying..." % err)
-                time.sleep(3)
-            else:
-                break
-        else:
-            sys.exit("Could not download msgpack")
-        tar_extract("modules", msgpack)
-
-    def add_command(self, command, description=None, workdir=None, args=None):
-        if os.name == "nt":
-            command = command + ".bat"
-        # Relative path to workdir.
-        workdir = workdir or [_BUILD_DIR]
-        dots = [".."] * len(workdir)
-        if workdir[0] == ".":
-            dots = []
-        if os.name == "nt":
-            dots.extend([os.getcwd(), _BUILD_DIR, "bin", command])
-        else:
-            dots.extend([_BUILD_DIR, "bin", command])
-        self.steps.append(
-            functools.partial(
-                run_command,
-                command=[os.path.join(*dots)] + (args or []),
-                description=description or command,
-                workdir=os.path.join(*workdir),
-            )
-        )
-
-    def add_indirect_command(self, command, args=None):
-        if os.name == "nt":
-            command = command + ".bat"
-        # Relative path to workdir.
-        workdir = [_BUILD_DIR]
-        dots = [".."] * len(workdir)
-        if workdir[0] == ".":
-            dots = []
-        if os.name == "nt":
-            dots.extend([os.getcwd(), _BUILD_DIR, "bin", command])
-        else:
-            dots.extend([_BUILD_DIR, "bin", command])
-        self.steps.append(
-            functools.partial(
-                run_command,
-                command=["./indirection.sh", os.path.join(*dots)] + (args or []),
-                description="(via conda environment) " + command,
-                workdir=os.path.join(*workdir),
-            )
-        )
-
-    def add_refresh(self):
-        self.add_command("libtbx.refresh", description="libtbx.refresh", workdir=["."])
-
-    def add_precommit(self):
-        self.add_command(
-            "libtbx.precommit",
-            description="libtbx.precommit install",
-            workdir=["."],
-            args=["install"],
-        )
-
-    def add_configure(self):
-        if os.name == "nt":
-            conda_python = os.path.join(os.getcwd(), "conda_base", "python.exe")
-        elif sys.platform.startswith("darwin"):
-            conda_python = os.path.join(
-                "..", "conda_base", "python.app", "Contents", "MacOS", "python"
-            )
-        else:
-            conda_python = os.path.join("..", "conda_base", "bin", "python")
-
-        if not any(flag.startswith("--compiler=") for flag in self.config_flags):
-            self.config_flags.append("--compiler=conda")
-        if "--enable_cxx11" not in self.config_flags:
-            self.config_flags.append("--enable_cxx11")
-        if "--use_conda" not in self.config_flags:
-            self.config_flags.append("--use_conda")
-
-        with open("dials", "w"):
-            pass  # ensure we write a new-style environment setup script
-
-        configcmd = (
-            [
-                conda_python,
-                os.path.join(
-                    "..", "modules", "cctbx_project", "libtbx", "configure.py"
-                ),
-            ]
-            + self.LIBTBX
-            + self.config_flags
-        )
-        self.steps.append(
-            functools.partial(
-                run_command,
-                command=configcmd,
-                description="run configure.py",
-                workdir=_BUILD_DIR,
-            )
-        )
-        self.steps.append(self.generate_environment_indirector)
-
-    def generate_environment_indirector(self):
-        filename = os.path.join(os.getcwd(), _BUILD_DIR, "indirection.sh")
-        with open(filename, "w") as fh:
-            fh.write("#!/bin/bash\n")
-            fh.write("source %s/conda_base/etc/profile.d/conda.sh\n" % os.getcwd())
-            fh.write("conda activate %s/conda_base\n" % os.getcwd())
-            fh.write('"$@"\n')
-        mode = os.stat(filename).st_mode
-        mode |= (mode & 0o444) >> 2  # copy R bits to X
-        os.chmod(filename, mode)
-
-    def add_make(self):
-        try:
-            nproc = len(os.sched_getaffinity(0))
-        except AttributeError:
-            nproc = multiprocessing.cpu_count()
-        self.add_indirect_command("libtbx.scons", args=["-j", str(nproc)])
-        # run build again to make sure everything is built
-        self.add_indirect_command("libtbx.scons", args=["-j", str(nproc)])
-
-    def add_tests(self):
-        self.add_command(
-            "libtbx.pytest",
-            args=["--regression", "-n", "auto"],
-            description="test dxtbx",
-            workdir=["modules", "dxtbx"],
-        )
-        self.add_command(
-            "libtbx.pytest",
-            args=["--regression", "-n", "auto"],
-            description="test DIALS",
-            workdir=["modules", "dials"],
-        )
+def make_build():
+    try:
+        nproc = len(os.sched_getaffinity(0))
+    except AttributeError:
+        nproc = multiprocessing.cpu_count()
+    run_indirect_command(os.path.join("bin", "libtbx.scons"), args=["-j", str(nproc)])
+    # run build again to make sure everything is built
+    run_indirect_command(os.path.join("bin", "libtbx.scons"), args=["-j", str(nproc)])
 
 
 def repository_at_tag(string):
@@ -1135,13 +984,13 @@ def run():
     update - Update source repositories (cctbx, cbflib, etc.)
     base - Create conda environment
     build - Build
-    tests - Run tests
+    test - Run tests
 
   The default actions are: update, base, build
 
   Example:
 
-    python bootstrap.py update base build tests
+    python bootstrap.py update base build test
   """
 
     parser = argparse.ArgumentParser(
@@ -1149,7 +998,7 @@ def run():
         description=description,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    action_choices = Choices(("update", "base", "build", "tests"))
+    action_choices = Choices(("update", "base", "build", "test"))
     action_choices.default = ["update", "base", "build"]
     parser.add_argument(
         "actions",
@@ -1166,7 +1015,7 @@ def run():
         "--config-flags",
         help="""Pass flags to the configuration step. Flags should
 be passed separately with quotes to avoid confusion (e.g
---config_flags="--build=debug" --config_flags="--enable_cxx11")""",
+--config_flags="--build=debug" --config_flags="--another_flag")""",
         action="append",
         default=[],
     )
@@ -1174,12 +1023,13 @@ be passed separately with quotes to avoid confusion (e.g
         "--python",
         help="Install this minor version of Python (default: %(default)s)",
         default="3.6",
-        choices=["3.6", "3.7", "3.8"],
+        choices=("3.6", "3.7", "3.8"),
     )
     parser.add_argument(
         "--branch",
         type=repository_at_tag,
         action="append",
+        default=[],
         help=(
             "during 'update' step when a repository is newly cloned set it to a given branch."
             "Specify as repository@branch, eg. 'dials@dials-next'"
@@ -1188,7 +1038,26 @@ be passed separately with quotes to avoid confusion (e.g
 
     options = parser.parse_args()
     print("Performing actions:", " ".join(options.actions))
-    DIALSBuilder(options=options).run()
+
+    # Add sources
+    if "update" in options.actions:
+        update_sources(options)
+
+    # Build base packages
+    if "base" in options.actions:
+        install_conda(options.python)
+
+    # Configure, make, get revision numbers
+    if "build" in options.actions:
+        configure_build(options.config_flags)
+        make_build()
+        refresh_build()
+        install_precommit()
+
+    # Tests, tests
+    if "test" in options.actions:
+        run_tests()
+
     print("\nBootstrap success: %s" % ", ".join(options.actions))
 
 
