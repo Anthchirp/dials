@@ -90,6 +90,10 @@ steps:
   failOnStderr: true
   workingDirectory: $(Pipeline.Workspace)
 
+- script: |
+    choco install microsoft-visual-cpp-build-tools
+  displayName: Install Visual C++ Build Tools 2015
+
 # # Get a ready-made DIALS build directory from cache if available
 # # Allow day-to-day incremental cache updates
 # # Flush the cache once a week and whenever the environment specification
