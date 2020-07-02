@@ -1134,7 +1134,8 @@ be passed separately with quotes to avoid confusion (e.g
         configure_build(options.config_flags)
         make_build()
         refresh_build()
-        install_precommit()
+        if os.name != "nt":
+            install_precommit()
 
     # Tests, tests
     if "test" in options.actions:
