@@ -988,7 +988,7 @@ def configure_build(config_flags):
     else:
         conda_python = os.path.join("..", "conda_base", "bin", "python")
 
-    if not any(flag.startswith("--compiler=") for flag in config_flags):
+    if os.name != "nt" and not any(flag.startswith("--compiler=") for flag in config_flags):
         config_flags.append("--compiler=conda")
     if "--enable_cxx11" not in config_flags:
         config_flags.append("--enable_cxx11")
