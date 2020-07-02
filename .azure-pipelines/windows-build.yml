@@ -92,7 +92,7 @@ steps:
 
 - script: |
     choco install microsoft-visual-cpp-build-tools
-  displayName: Install Visual C++ Build Tools 2015
+  displayName: Install MSVC 2015 Build Tools
 
 # # Get a ready-made DIALS build directory from cache if available
 # # Allow day-to-day incremental cache updates
@@ -124,12 +124,13 @@ steps:
 # If the build directory could not be loaded from cache then
 # create a new one using the bootstrap script
 - script: |
-    pushd "C:\Program Files (x86)\Microsoft Visual Studio\Installer\"
-    for /f "delims=" %%x in ('.\vswhere.exe -latest -property InstallationPath') do set VSPATH=%%x
-    popd
-    call "%VSPATH%\VC\Auxiliary\Build\vcvarsall.bat" x64
+    # pushd "C:\Program Files (x86)\Microsoft Visual Studio\Installer\"
+    # for /f "delims=" %%x in ('.\vswhere.exe -latest -property InstallationPath') do set VSPATH=%%x
+    # popd
+    # call "%VSPATH%\VC\Auxiliary\Build\vcvarsall.bat" x64
+    call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\amd64\vcvars64.bat"
     python modules/dials/installer/bootstrap.py build
-#   cp -v dials build/activate  # ensure a copy is kept in the cache
+    # cp -v dials build/activate  # ensure a copy is kept in the cache
   displayName: DIALS build (initial)
   workingDirectory: $(Pipeline.Workspace)
 # condition: eq(variables.BUILD_CACHED, 'false')
