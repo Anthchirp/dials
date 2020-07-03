@@ -82,17 +82,10 @@ steps:
   workingDirectory: $(Pipeline.Workspace)
 # condition: eq(variables.BASE_CACHED, 'false')
 
-- powershell: |
-    ls
-    ls modules
-    pwd
-  displayName: Print some info
-  failOnStderr: true
-  workingDirectory: $(Pipeline.Workspace)
-
 - script: |
     choco install microsoft-visual-cpp-build-tools
   displayName: Install MSVC 2015 Build Tools
+  # can't use vs2017+ yet, as cbflib_adaptbx won't build
 
 # # Get a ready-made DIALS build directory from cache if available
 # # Allow day-to-day incremental cache updates
@@ -124,16 +117,26 @@ steps:
 # If the build directory could not be loaded from cache then
 # create a new one using the bootstrap script
 - script: |
-    # pushd "C:\Program Files (x86)\Microsoft Visual Studio\Installer\"
-    # for /f "delims=" %%x in ('.\vswhere.exe -latest -property InstallationPath') do set VSPATH=%%x
-    # popd
-    # call "%VSPATH%\VC\Auxiliary\Build\vcvarsall.bat" x64
+    REM -- generic VS path setter, but only works if it is the only installation:
+    REM pushd "C:\Program Files (x86)\Microsoft Visual Studio\Installer\"
+    REM for /f "delims=" %%x in ('.\vswhere.exe -latest -property InstallationPath') do set VSPATH=%%x
+    REM popd
+    REM call "%VSPATH%\VC\Auxiliary\Build\vcvarsall.bat" x64
     call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\amd64\vcvars64.bat"
     python modules/dials/installer/bootstrap.py build
-    # cp -v dials build/activate  # ensure a copy is kept in the cache
+    REM cp -v dials build/activate  # ensure a copy is kept in the cache
   displayName: DIALS build (initial)
   workingDirectory: $(Pipeline.Workspace)
 # condition: eq(variables.BUILD_CACHED, 'false')
+
+- powershell: |
+    ls
+    ls modules
+    ls build
+    pwd
+  displayName: Print some info
+  failOnStderr: true
+  workingDirectory: $(Pipeline.Workspace)
 
 # # If the build directory was loaded (or kick-started) from cache then
 # # do an incremental build
