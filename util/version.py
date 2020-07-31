@@ -64,10 +64,7 @@ def get_git_version(dials_path, treat_merges_as_single_commit=False):
                     cwd=dials_path,
                     stderr=devnull,
                 ).rstrip()
-                if depth:
-                    depth = depth.strip().count("\n") + 1
-                else:
-                    depth = 0
+                depth = 0
                 version = "%s-%d-%s" % (tag, depth, commit)
 
         # Turn descriptive version string into proper version number
