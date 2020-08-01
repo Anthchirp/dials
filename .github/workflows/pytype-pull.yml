@@ -33,7 +33,7 @@ jobs:
 
     - name: Run type checking on pull request
       run: |
-        pytype -j auto -n -k dials | tee pytypelog-merged
+        pytype -j auto -k dials | tee pytypelog-merged
 
     - name: Check out pull request base
       run: |
@@ -44,7 +44,7 @@ jobs:
 
     - name: Run type checking on pull request base
       run: |
-        pytype -j auto -n -k dials | tee pytypelog-base
+        pytype -j auto -k dials | tee pytypelog-base
 
     - name: Parse pytype output
       run: |
