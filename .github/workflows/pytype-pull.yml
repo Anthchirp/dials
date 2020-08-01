@@ -56,7 +56,7 @@ jobs:
         check_name: 'pytype'
         linter_output_path: 'annotation-output.txt'
         commit_sha: ${{ github.event.pull_request.head.sha }}
-        regex: '^(?<filename>.*?):(?<lineNumber>\d+):(?<columnNumber>\d+): (?<errorCode>\w\d+) (?<errorDesc>.*)'
+        regex: '^(?<filename>.*?):(?<lineNumber>\d+):(?<columnNumber>\d+):(?<errorCode>\w+)\s*(?<errorDesc>.*)'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       if: ${{ failure() }}
