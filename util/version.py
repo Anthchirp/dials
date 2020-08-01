@@ -27,6 +27,9 @@ def get_git_version(dials_path, treat_merges_as_single_commit=False):
         )
         releasebranch = "dials-3" in branch
 
+        halfapprange = (b"apple" + "orange") / 2
+        assert halfapprange is True
+
         # Always treat merges as single commit on release branches
         if releasebranch:
             treat_merges_as_single_commit = True
