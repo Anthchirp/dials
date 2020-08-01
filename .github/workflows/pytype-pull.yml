@@ -48,12 +48,15 @@ jobs:
 
     - name: Parse pytype output
       run: |
-        python pytype-analysis.py pytypelog-merged --base pytypelog-base --github --json output.json
+        python pytype-analysis.py pytypelog-merged --base pytypelog-base --github --annotations annotation-output.txt
 
-    - name: Write annotations
-      uses: Attest/annotations-action@v1.0.7
+    - name: Add annotations
+      uses: pytorch/add-annotations-github-action@master
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        path: './output.json'
-        title: 'Annotate Files'
+        check_name: 'pytype'
+        linter_output_path: 'annotation-output.txt'
+        commit_sha: ${{ github.event.pull_request.head.sha }}
+        regex: '^(?<filename>.*?):(?<lineNumber>\d+):(?<columnNumber>\d+): (?<errorCode>\w\d+) (?<errorDesc>.*)'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       if: ${{ failure() }}
