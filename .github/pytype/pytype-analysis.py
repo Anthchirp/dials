@@ -129,7 +129,7 @@ def parse_pytypelog(logfile):
             contents.pop(0)
 
     return parse_results(
-        errors=sum(len(f) for f in errors),
+        errors=sum(len(f) for f in errors.values()),
         missing_imports=import_errors,
         files=errors,
         total_files=n_files,
