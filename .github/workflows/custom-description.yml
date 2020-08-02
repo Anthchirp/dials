@@ -1,0 +1,22 @@
+name: some custom stuff (pull)
+on: [ pull_request ]
+
+jobs:
+  custom:
+    runs-on: ubuntu-latest
+    name: custom
+
+    steps:
+    - name: Clone repository
+      uses: actions/checkout@v2
+
+    - name: crash and burn
+      run: |
+        exit 1
+
+    - uses: ouzi-dev/commit-status-updater@v1.0.4
+      with:
+        status: "error"
+        url: http://myurl.io/
+        description: "this is my status check"
+      if: ${{ failure() }}
