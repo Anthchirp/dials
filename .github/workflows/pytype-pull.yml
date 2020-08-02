@@ -39,10 +39,9 @@ jobs:
       run: |
         cd dials
         git checkout HEAD^1
-        git clean -dffx
         git log -1 HEAD
 
-    - name: Run type checking on pull request base
+    - name: Run type checking on target branch
       run: |
         pytype -j auto -k dials | tee pytypelog-base
 
