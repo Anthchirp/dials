@@ -42,9 +42,16 @@ jobs:
     - name: Check out pull request target branch
       run: |
         cd dials
+        git status
+        ls -la
         git clean -dffx
         git checkout HEAD^1
         git log -1 HEAD
+        git status
+        ls -la
+        cd ..
+        pwd
+        ls -la
 
     - name: Type check pull request target branch
       run: |
