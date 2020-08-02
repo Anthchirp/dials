@@ -31,17 +31,17 @@ jobs:
       run: |
         cp dials/.github/pytype/pytype-analysis.py .
 
-    - name: Run type checking on pull request
+    - name: Type check merged pull request
       run: |
         pytype -j auto -k dials | tee pytypelog-merged
 
-    - name: Check out pull request base
+    - name: Check out pull request target branch
       run: |
         cd dials
         git checkout HEAD^1
         git log -1 HEAD
 
-    - name: Run type checking on target branch
+    - name: Type check pull request target branch
       run: |
         pytype -j auto -k dials | tee pytypelog-base
 
