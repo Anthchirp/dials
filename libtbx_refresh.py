@@ -54,12 +54,17 @@ dials.precommitbx.nagger.nag()
 def _create_dials_env_script():
     """
     write dials environment setup script and clobber cctbx setup scripts
-    does nothing unless a file named 'dials' exists above the build/ directory
+    does nothing unless a file named 'dials'/'dials.cmd' exists above
+    the build/ directory
     """
     import libtbx.load_env
     import os
 
-    filename = abs(libtbx.env.build_path.dirname() / "dials")
+    if os.name == "nt":
+        filename = abs(libtbx.env.build_path.dirname() / "dials.cmd")
+    else:
+        filename = abs(libtbx.env.build_path.dirname() / "dials")
+
     if not os.path.exists(filename):
         return
 
