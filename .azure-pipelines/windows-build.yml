@@ -6,6 +6,15 @@
 
 steps:
 
+- script: |
+    choco install microsoft-visual-cpp-build-tools
+  displayName: Install MSVC 2015 Build Tools
+  # can't use vs2017+ yet, as cbflib_adaptbx won't build
+
+- script: |
+    type C:\ProgramData\chocolatey\logs\chocolatey.log
+  displayName: Show Chocolog
+
 # Obtain a shallow clone of the DIALS repository.
 # DIALS will not be able to report proper version numbers
 - checkout: self
@@ -81,11 +90,6 @@ steps:
   displayName: Create python $(PYTHON_VERSION) environment
   workingDirectory: $(Pipeline.Workspace)
 # condition: eq(variables.BASE_CACHED, 'false')
-
-- script: |
-    choco install microsoft-visual-cpp-build-tools
-  displayName: Install MSVC 2015 Build Tools
-  # can't use vs2017+ yet, as cbflib_adaptbx won't build
 
 # # Get a ready-made DIALS build directory from cache if available
 # # Allow day-to-day incremental cache updates
