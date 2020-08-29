@@ -996,7 +996,7 @@ def configure_build(config_flags):
         config_flags.append("--use_conda")
 
     # write a new-style environment setup script
-    with open(("dials.cmd" if os.name == "nt" else "dials") , "w"):
+    with open(("dials.bat" if os.name == "nt" else "dials") , "w"):
         pass  # ensure we write a new-style environment setup script
 
     configcmd = [
