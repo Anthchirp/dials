@@ -11,10 +11,6 @@ steps:
   displayName: Install MSVC 2015 Build Tools
   # can't use vs2017+ yet, as cbflib_adaptbx won't build
 
-- script: |
-    type C:\ProgramData\chocolatey\logs\chocolatey.log
-  displayName: Show Chocolog
-
 # Obtain a shallow clone of the DIALS repository.
 # DIALS will not be able to report proper version numbers
 - checkout: self
