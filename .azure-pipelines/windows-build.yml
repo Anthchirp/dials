@@ -6,10 +6,10 @@
 
 steps:
 
-- script: |
-    choco install microsoft-visual-cpp-build-tools
-  displayName: Install MSVC 2015 Build Tools
-  # can't use vs2017+ yet, as cbflib_adaptbx won't build
+#- script: |
+#    choco install microsoft-visual-cpp-build-tools
+#  displayName: Install MSVC 2015 Build Tools
+#  # can't use vs2017+ yet, as cbflib_adaptbx won't build
 
 # Obtain a shallow clone of the DIALS repository.
 # DIALS will not be able to report proper version numbers
@@ -86,6 +86,13 @@ steps:
   displayName: Create python $(PYTHON_VERSION) environment
   workingDirectory: $(Pipeline.Workspace)
 # condition: eq(variables.BASE_CACHED, 'false')
+
+- powershell: |
+    ls -recurse conda_base
+  displayName: List contents of the conda base directory
+  failOnStderr: true
+  workingDirectory: $(Pipeline.Workspace)
+  condition: always()
 
 # # Get a ready-made DIALS build directory from cache if available
 # # Allow day-to-day incremental cache updates
