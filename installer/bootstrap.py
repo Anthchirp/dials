@@ -271,10 +271,10 @@ channels:
 #       )
 
     if os.name == "nt":
-        run_indirect_command("pip", args=["install", "scipy", "scikit-learn"])
-        # scipy does not have Windows packages in conda-forge,
+        # There are no scipy Windows packages in conda-forge,
+        # so install that plus downstream dependencies using pip.
         # https://github.com/conda-forge/vs2008_runtime-feedstock
-
+        run_indirect_command(os.path.join(prefix, "Scripts", "pip.exe"), args=["install", "scipy", "scikit-learn"])
 
     # check that environment file is updated
     if prefix not in get_environments():
