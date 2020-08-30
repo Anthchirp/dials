@@ -336,7 +336,7 @@ def run_indirect_command(command, args):
         make_executable(filename)
         indirection = [filename]
     run_command(
-        command=indirection + [command] + args
+        command=indirection + [command] + args, workdir="."
     )
 
 
