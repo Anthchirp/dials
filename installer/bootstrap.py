@@ -323,7 +323,8 @@ def run_indirect_command(command, args):
             fh.write("shift\r\n")
             fh.write("cd %s\\build\r\n" % os.getcwd())
             fh.write("%*\r\n")
-        command = command + ".bat"
+        if not command.endswith((".bat", ".cmd", ".exe")):
+            command = command + ".bat"
         indirection = ["cmd.exe", "/C", filename]
     else:
         filename = "indirection.sh"
