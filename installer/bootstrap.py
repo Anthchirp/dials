@@ -263,11 +263,18 @@ channels:
     # on Windows, also download the Visual C++ 2008 Redistributable
     # use the same version as conda-forge
     # https://github.com/conda-forge/vs2008_runtime-feedstock
+#   why?
+#   if os.name == "nt":
+#       download_to_file(
+#          "https://download.microsoft.com/download/5/D/8/5D8C65CB-C849-4025-8E95-C3966CAFD8AE/vcredist_x64.exe",
+#          os.path.join(prefix, "vcredist_x64.exe"),
+#       )
+
     if os.name == "nt":
-        download_to_file(
-            "https://download.microsoft.com/download/5/D/8/5D8C65CB-C849-4025-8E95-C3966CAFD8AE/vcredist_x64.exe",
-            os.path.join(prefix, "vcredist_x64.exe"),
-        )
+        run_indirect_command("pip", args=["install", "scipy", "scikit-learn"])
+        # scipy does not have Windows packages in conda-forge,
+        # https://github.com/conda-forge/vs2008_runtime-feedstock
+
 
     # check that environment file is updated
     if prefix not in get_environments():
