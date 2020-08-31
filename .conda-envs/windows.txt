@@ -40,7 +40,7 @@ conda-forge::requests
 # conda-forge::scikit-learn  # blocked by https://github.com/conda-forge/scipy-feedstock/issues/80
 # conda-forge::scipy  # blocked by https://github.com/conda-forge/scipy-feedstock/issues/80
 conda-forge::scons
-conda-forge::setuptools
+conda-forge::setuptools<50.0
 conda-forge::six
 conda-forge::sphinx
 conda-forge::sqlite
