@@ -27,9 +27,6 @@ jobs:
       run: |
         echo ${GITHUB_EVENT_PATH}
         cat ${GITHUB_EVENT_PATH}
-    - name: Event info
-      run: |
-        echo "${{toJson(github)}}"
 
 #     uses: Anthchirp/action-wait-for-check@4699210ccc66e2a13260803fadbb77085421b891
 #           # Original repository: https://github.com/fountainhead/action-wait-for-check
