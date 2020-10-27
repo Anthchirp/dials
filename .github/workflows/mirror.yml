@@ -17,12 +17,13 @@ jobs:
     # if: github.repository == 'cctbx/cctbx_project'
 
     steps:
-    - name: Get check suite ID
+    - name: Get underlying commit ID
       run: |
-        echo repository = ${GITHUB_REPOSITORY}
-        echo run id = ${GITHUB_RUN_ID}
-        GITHUB_CHECK_SUITE_ID=`curl -s https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID} | jq -r '.check_suite_id'`
-        echo CSID = ${GITHUB_CHECK_SUITE_ID}
+        echo ------------
+        grep head_sha ${GITHUB_EVENT_PATH}
+        echo ------------
+        COMMIT=$(grep head_sha ${GITHUB_EVENT_PATH} | cut -d'"' -f4)
+        echo commit is $COMMIT
     - name: Event json
       run: |
         echo ${GITHUB_EVENT_PATH}
