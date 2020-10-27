@@ -32,10 +32,21 @@ jobs:
         fetch-depth: '0'
 
     - name: Check if commit is on master
+      id: check_on_commit
       run: |
         git status
-        git merge-base --is-ancestor ${{ github.event.check_suite.head_sha }} HEAD
+        git merge-base --is-ancestor ${{ github.event.check_suite.head_sha }} HEAD && {
+          echo Commit is on master
+          echo "::set-output name=conclusion::proceed"
+        } || {
+          echo Commit is not on master
+          echo "::set-output name=conclusion::skip"
+        }
 
+    - name: Proceed with a thing
+      if: steps.check_on_commit.output.conclusion == 'proceed'
+      run: |
+        echo Do thing
 
 #     uses: Anthchirp/action-wait-for-check@4699210ccc66e2a13260803fadbb77085421b891
 #           # Original repository: https://github.com/fountainhead/action-wait-for-check
