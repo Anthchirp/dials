@@ -44,7 +44,7 @@ jobs:
         }
 
     - name: Proceed with a thing
-      if: steps.check_on_commit.output.conclusion == 'proceed'
+      if: steps.check_on_commit.outputs.conclusion == 'proceed'
       run: |
         echo Do thing
 
