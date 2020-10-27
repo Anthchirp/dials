@@ -19,15 +19,11 @@ jobs:
     steps:
     - name: Get underlying commit ID
       run: |
-        echo ------------
-        grep head_sha ${GITHUB_EVENT_PATH}
-        echo ------------
-        COMMIT=$(grep head_sha ${GITHUB_EVENT_PATH} | cut -d'"' -f4)
-        echo commit is $COMMIT
-    - name: Event json
-      run: |
-        echo ${GITHUB_EVENT_PATH}
         cat ${GITHUB_EVENT_PATH}
+        COMMIT=$(grep head_sha ${GITHUB_EVENT_PATH} | cut -d'"' -f4)
+        echo underlying commit is $COMMIT
+        echo naive expectation: ${{ github.event.pull_request.head.sha || github.sha }}
+        echo better maybe: ${{ github.event.check_suite.head_sha }}
 
 #     uses: Anthchirp/action-wait-for-check@4699210ccc66e2a13260803fadbb77085421b891
 #           # Original repository: https://github.com/fountainhead/action-wait-for-check
