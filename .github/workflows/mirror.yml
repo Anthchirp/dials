@@ -26,6 +26,17 @@ jobs:
         echo ---------
         cat ${GITHUB_EVENT_PATH}
 
+    - name: Check out repository
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: '0'
+
+    - name: Check if commit is on master
+      run: |
+        git status
+        git merge-base --is-ancestor ${{ github.event.check_suite.head_sha }}
+
+
 #     uses: Anthchirp/action-wait-for-check@4699210ccc66e2a13260803fadbb77085421b891
 #           # Original repository: https://github.com/fountainhead/action-wait-for-check
 #           # This is tagged version v1.0.0, but do not use version tags
@@ -65,12 +76,6 @@ jobs:
 #       ref: ${{ github.event.pull_request.head.sha || github.sha }}
 #       intervalSeconds: 30
 #       timeoutSeconds: 120
-
-#   - name: Check out repository
-#     if: steps.wait-for-checks.outputs.conclusion == 'success' && steps.wait-for-xfel-build.outputs.conclusion == 'success' && steps.wait-for-build.outputs.conclusion == 'success'
-#     uses: actions/checkout@v2
-#     with:
-#       fetch-depth: '0'
 
 #   - name: Install SSH key
 #     if: steps.wait-for-checks.outputs.conclusion == 'success' && steps.wait-for-xfel-build.outputs.conclusion == 'success' && steps.wait-for-build.outputs.conclusion == 'success'
