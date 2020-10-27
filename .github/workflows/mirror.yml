@@ -27,11 +27,13 @@ jobs:
         cat ${GITHUB_EVENT_PATH}
 
     - name: Check out repository
+      if: never()
       uses: actions/checkout@v2
       with:
         fetch-depth: '0'
 
     - name: Check if commit is on master
+      if: never()
       id: check_on_commit
       run: |
         git status
