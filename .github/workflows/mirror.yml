@@ -34,7 +34,7 @@ jobs:
     - name: Check if commit is on master
       run: |
         git status
-        git merge-base --is-ancestor ${{ github.event.check_suite.head_sha }}
+        git merge-base --is-ancestor ${{ github.event.check_suite.head_sha }} HEAD
 
 
 #     uses: Anthchirp/action-wait-for-check@4699210ccc66e2a13260803fadbb77085421b891
