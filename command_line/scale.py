@@ -40,8 +40,7 @@ import sys
 
 from six.moves import cStringIO as StringIO
 
-from libtbx import phil
-
+import freephil as phil
 from dials.algorithms.scaling.algorithm import ScaleAndFilterAlgorithm, ScalingAlgorithm
 from dials.util import Sorry, log, show_mail_handle_errors
 from dials.util.options import OptionParser, reflections_and_experiments_from_files

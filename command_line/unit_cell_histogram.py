@@ -5,11 +5,11 @@ import math
 
 import numpy as np
 
-import libtbx.phil
 from scitbx.array_family import flex
 from scitbx.math import five_number_summary
 
 import dials.util
+import freephil
 from dials.algorithms.clustering.observers import uc_params_from_experiments
 from dials.util import log
 from dials.util.options import OptionParser, flatten_experiments
@@ -20,7 +20,7 @@ logger = logging.getLogger("dials.unit_cell_histogram")
 help_message = """
 """
 
-phil_scope = libtbx.phil.parse(
+phil_scope = freephil.parse(
     """
 steps_per_angstrom = 20
   .type = int

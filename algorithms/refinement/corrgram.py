@@ -7,7 +7,7 @@ import logging
 import math
 import os
 
-import libtbx.phil
+import freephil
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +41,7 @@ phil_str = """
     }
 """
 
-phil_scope = libtbx.phil.parse(phil_str)
+phil_scope = freephil.parse(phil_str)
 
 
 def corrgram(corrmat, labels):

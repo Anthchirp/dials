@@ -17,8 +17,8 @@ from cctbx import uctbx
 from dxtbx.model import Beam, Crystal, Detector, Experiment, Goniometer, Scan
 from dxtbx.model.experiment_list import ExperimentList
 from dxtbx.serialize import load
-from libtbx import phil
 
+import freephil as phil
 from dials.algorithms.scaling.algorithm import ScalingAlgorithm, prepare_input
 from dials.array_family import flex
 from dials.command_line import merge, report, scale

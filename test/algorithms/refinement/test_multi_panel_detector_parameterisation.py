@@ -16,7 +16,6 @@ from cctbx.sgtbx import space_group, space_group_symbols
 from cctbx.uctbx import unit_cell
 from dxtbx.model import Detector, Panel, ScanFactory
 from dxtbx.model.experiment_list import Experiment, ExperimentList
-from libtbx.phil import parse
 from libtbx.test_utils import approx_equal
 from rstbx.symmetry.constraints.parameter_reduction import symmetrize_reduce_enlarge
 from scitbx import matrix
@@ -48,6 +47,7 @@ from dials.algorithms.refinement.target import (
 )
 from dials.algorithms.spot_prediction import IndexGenerator, ray_intersection
 from dials.array_family import flex
+from freephil import parse
 
 
 def make_panel_in_array(array_elt, reference_panel):

@@ -10,9 +10,10 @@ from copy import deepcopy
 import pkg_resources
 import six
 
-from libtbx import phil
 from libtbx.table_utils import simple_table
 from scitbx.array_family import flex
+
+import freephil as phil
 
 
 class CrossValidator(object):

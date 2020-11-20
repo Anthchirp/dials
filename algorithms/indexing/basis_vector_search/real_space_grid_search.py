@@ -3,13 +3,13 @@ from __future__ import absolute_import, division, print_function
 import logging
 import math
 
-from libtbx import phil
 from rstbx.array_family import (
     flex,  # required to load scitbx::af::shared<rstbx::Direction> to_python converter
 )
 from rstbx.dps_core import SimpleSamplerTool
 from scitbx import matrix
 
+import freephil as phil
 from dials.algorithms.indexing import DialsIndexError
 
 from .strategy import Strategy

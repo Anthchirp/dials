@@ -424,9 +424,8 @@ def test_integrator_3d(dials_data, nproc):
     rlist.compute_zeta_multi(exlist)
     rlist.compute_d(exlist)
 
-    from libtbx.phil import parse
-
     from dials.algorithms.integration.integrator import Integrator3D, phil_scope
+    from freephil import parse
 
     params = phil_scope.fetch(
         parse(
@@ -462,12 +461,11 @@ def test_summation(dials_data):
     rlist["id"] = flex.int(len(rlist), 0)
 
     def integrate(integrator_type, rlist):
-        from libtbx.phil import parse
-
         from dials.algorithms.integration.integrator import create_integrator
         from dials.algorithms.integration.integrator import (
             phil_scope as master_phil_scope,
         )
+        from freephil import parse
 
         rlist = rlist.copy()
 

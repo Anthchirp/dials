@@ -4,10 +4,10 @@ import collections
 import os
 import re
 
-import libtbx.phil
 from dxtbx.model.experiment_list import ExperimentListFactory
 from libtbx.utils import Sorry
 
+import freephil
 from dials.array_family import flex
 
 FilenameDataWrapper = collections.namedtuple("FilenameDataWrapper", "filename, data")
@@ -25,7 +25,7 @@ class ExperimentListConverters(object):
         return self.phil_type
 
     def from_words(self, words, master):
-        s = libtbx.phil.str_from_words(words=words)
+        s = freephil.str_from_words(words=words)
         if s is None:
             return None
         if s == "<image files>":
@@ -44,7 +44,7 @@ class ExperimentListConverters(object):
             value = "None"
         else:
             value = python_object.filename
-        return [libtbx.phil.tokenizer.word(value=value)]
+        return [freephil.tokenizer.word(value=value)]
 
 
 class ReflectionTableConverters(object):
@@ -56,7 +56,7 @@ class ReflectionTableConverters(object):
         return self.phil_type
 
     def from_words(self, words, master):
-        s = libtbx.phil.str_from_words(words=words)
+        s = freephil.str_from_words(words=words)
         if s is None:
             return None
         if not os.path.exists(s):
@@ -68,7 +68,7 @@ class ReflectionTableConverters(object):
             value = "None"
         else:
             value = python_object.filename
-        return [libtbx.phil.tokenizer.word(value=value)]
+        return [freephil.tokenizer.word(value=value)]
 
 
 class ReflectionTableSelectorConverters(object):
@@ -80,7 +80,7 @@ class ReflectionTableSelectorConverters(object):
         return self.phil_type
 
     def from_words(self, words, master):
-        s = libtbx.phil.str_from_words(words=words)
+        s = freephil.str_from_words(words=words)
         if s is None:
             return None
         regex = r"^\s*([\w\.]+)\s*(<=|!=|==|>=|<|>|&)\s*(.+)\s*$"
@@ -104,11 +104,11 @@ class ReflectionTableSelectorConverters(object):
                 python_object.op_string,
                 python_object.value,
             )
-        return [libtbx.phil.tokenizer.word(value=value)]
+        return [freephil.tokenizer.word(value=value)]
 
 
 # Create the default converter registry with the extract converters
-default_converter_registry = libtbx.phil.extended_converter_registry(
+default_converter_registry = freephil.extended_converter_registry(
     additional_converters=[
         ExperimentListConverters,
         ReflectionTableConverters,
@@ -127,7 +127,7 @@ def parse(
     """Redefinition of the parse function."""
     if converter_registry is None:
         converter_registry = default_converter_registry
-    return libtbx.phil.parse(
+    return freephil.parse(
         input_string=input_string,
         source_info=source_info,
         file_name=file_name,

@@ -28,7 +28,7 @@ class Script(object):
 
     def __init__(self):
         """Initialise the script."""
-        from libtbx.phil import parse
+        from freephil import parse
 
         # The phil scope
         phil_scope = parse(

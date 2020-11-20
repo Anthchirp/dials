@@ -8,8 +8,8 @@ from copy import deepcopy
 import pytest
 
 from dxtbx.model.experiment_list import ExperimentListFactory
-from libtbx import phil
 
+import freephil as phil
 from dials.algorithms.refinement import DialsRefineConfigError, RefinerFactory
 from dials.algorithms.refinement.refiner import _trim_scans_to_observations, phil_scope
 from dials.array_family import flex

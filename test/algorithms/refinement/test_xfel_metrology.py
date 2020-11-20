@@ -6,8 +6,8 @@ import procrunner
 import pytest
 
 from dxtbx.model.experiment_list import ExperimentListFactory
-from libtbx import phil
 
+import freephil as phil
 from dials.algorithms.refinement import RefinerFactory
 from dials.algorithms.refinement.engine import Journal
 from dials.algorithms.refinement.refiner import phil_scope as refiner_phil_scope

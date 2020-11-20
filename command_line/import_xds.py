@@ -6,7 +6,6 @@ from cctbx import sgtbx
 from dxtbx.model import Crystal
 from dxtbx.model.experiment_list import ExperimentListFactory
 from iotbx.xds import integrate_hkl, spot_xds
-from libtbx.phil import parse
 from rstbx.cftbx.coordinate_frame_helpers import align_reference_frame
 from scitbx import matrix
 
@@ -14,6 +13,7 @@ from dials.array_family import flex
 from dials.util import show_mail_handle_errors
 from dials.util.command_line import Command
 from dials.util.options import OptionParser
+from freephil import parse
 
 
 class SpotXDSImporter(object):

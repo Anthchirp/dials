@@ -20,11 +20,11 @@ import copy
 import logging
 import sys
 
-import libtbx.phil
 from libtbx import Auto
 
 import dials.util
 import dials.util.log
+import freephil
 from dials.algorithms.refinement import (
     DialsRefineConfigError,
     DialsRefineRuntimeError,
@@ -38,7 +38,7 @@ from dials.util.version import dials_version
 logger = logging.getLogger("dials.command_line.refine")
 
 # The phil scope
-phil_scope = libtbx.phil.parse(
+phil_scope = freephil.parse(
     """
 
   output {
@@ -95,7 +95,7 @@ phil_scope = libtbx.phil.parse(
 )
 
 # local overrides for refiner.phil_scope
-phil_overrides = libtbx.phil.parse(
+phil_overrides = freephil.parse(
     """
   refinement
   {

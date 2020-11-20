@@ -3,10 +3,9 @@
 
 from __future__ import absolute_import, division, print_function
 
-from libtbx.phil import parse
-
 import dials.util.options
 from dials.util import show_mail_handle_errors
+from freephil import parse
 
 help_message = """
 

@@ -2,13 +2,12 @@
 
 from __future__ import absolute_import, division, print_function
 
-from libtbx.phil import command_line, parse
-
 from dials.algorithms.refinement.engine import (
     GaussNewtonIterations,
     LBFGScurvs,
     SimpleLBFGS,
 )
+from freephil import command_line, parse
 
 
 class Extract(object):

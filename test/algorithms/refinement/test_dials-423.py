@@ -14,8 +14,8 @@ of the offsets of all panels from the root frame.
 
 def test_run(dials_regression):
     from dxtbx.model.experiment_list import ExperimentListFactory
-    from libtbx import phil
 
+    import freephil as phil
     from dials.algorithms.refinement import RefinerFactory
     from dials.algorithms.refinement.refiner import phil_scope
     from dials.array_family import flex

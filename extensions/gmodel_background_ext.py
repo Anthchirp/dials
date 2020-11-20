@@ -8,7 +8,7 @@ class GModelBackgroundExt(object):
 
     @staticmethod
     def phil():
-        from libtbx.phil import parse
+        from freephil import parse
 
         phil = parse(
             """
@@ -42,9 +42,8 @@ class GModelBackgroundExt(object):
         :param params: The input parameters
         :param experiments: The list of experiments
         """
-        from libtbx.phil import parse
-
         from dials.algorithms.background.gmodel import BackgroundAlgorithm
+        from freephil import parse
 
         # Create some default parameters
         if params is None:

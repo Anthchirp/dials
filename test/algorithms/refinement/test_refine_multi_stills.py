@@ -5,8 +5,8 @@ import os
 import procrunner
 
 from dxtbx.model.experiment_list import ExperimentListFactory
-from libtbx import phil
 
+import freephil as phil
 from dials.algorithms.refinement import RefinerFactory
 from dials.array_family import flex
 

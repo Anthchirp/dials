@@ -6,10 +6,10 @@ import json
 import sys
 
 import libtbx
-import libtbx.phil
 from scitbx.array_family import flex
 
 import dials.util
+import freephil
 from dials.util import Sorry
 
 help_message = """
@@ -22,7 +22,7 @@ Examples::
   dials.shadow_plot models.expt mode=2d
 """
 
-phil_scope = libtbx.phil.parse(
+phil_scope = freephil.parse(
     """
 oscillation_range = None
   .type = floats(size=2)

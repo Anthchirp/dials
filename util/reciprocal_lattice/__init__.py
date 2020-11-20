@@ -1,14 +1,12 @@
-from __future__ import absolute_import, division, print_function
-
 import copy
 
-import libtbx.phil
 from scitbx import matrix
 
+import freephil
 from dials.array_family import flex
 from dials.util import Sorry
 
-phil_scope = libtbx.phil.parse(
+phil_scope = freephil.parse(
     """
 reverse_phi = False
   .type = bool

@@ -1,14 +1,13 @@
-from __future__ import absolute_import, division, print_function
-
 import logging
 import math
 
+import libtbx
 from cctbx import crystal, uctbx, xray
-from libtbx import libtbx, phil
 from scitbx import fftpack, matrix
 from scitbx.array_family import flex
 
 import dials_algorithms_indexing_ext
+import freephil as phil
 from dials.algorithms import indexing
 
 from .strategy import Strategy

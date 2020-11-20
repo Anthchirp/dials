@@ -26,20 +26,18 @@ Examples::
   dials.refine_bravais_settings indexed.expt indexed.refl nproc=4
 """
 
-from __future__ import absolute_import, division, print_function
-
 import collections
 import json
 import logging
 import os
 import sys
 
-import libtbx.phil
 from cctbx import sgtbx
 from cctbx.sgtbx import bravais_types
 from dxtbx.model import ExperimentList
 
 import dials.util
+import freephil
 from dials.algorithms.indexing.bravais_settings import (
     refined_settings_from_refined_triclinic,
 )
@@ -50,7 +48,7 @@ from dials.util.version import dials_version
 
 logger = logging.getLogger("dials.command_line.refine_bravais_settings")
 
-phil_scope = libtbx.phil.parse(
+phil_scope = freephil.parse(
     """
 include scope dials.algorithms.indexing.bravais_settings.phil_scope
 

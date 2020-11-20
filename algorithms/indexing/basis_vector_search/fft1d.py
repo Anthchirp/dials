@@ -1,8 +1,9 @@
 from __future__ import absolute_import, division, print_function
 
-from libtbx import phil
 from scitbx import matrix
 from scitbx.array_family import flex
+
+import freephil as phil
 
 from .strategy import Strategy
 

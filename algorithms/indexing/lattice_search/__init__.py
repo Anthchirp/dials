@@ -7,11 +7,11 @@ import math
 import pkg_resources
 from six.moves import cStringIO as StringIO
 
-import libtbx.phil
 import scitbx.matrix
 from dxtbx.model.experiment_list import Experiment, ExperimentList
 from scitbx.array_family import flex
 
+import freephil
 from dials.algorithms.indexing import indexer
 from dials.algorithms.indexing.basis_vector_search import combinations, optimise
 
@@ -76,7 +76,7 @@ optimise_initial_basis_vectors = False
     .expert_level = 2
 """
 
-basis_vector_search_phil_scope = libtbx.phil.parse(basis_vector_search_phil_str)
+basis_vector_search_phil_scope = freephil.parse(basis_vector_search_phil_str)
 
 methods = []
 for entry_point in itertools.chain(
@@ -91,7 +91,7 @@ for entry_point in itertools.chain(
     """
         % entry_point.name
     )
-    ext_master_scope = libtbx.phil.parse("%s .expert_level=1 {}" % entry_point.name)
+    ext_master_scope = freephil.parse("%s .expert_level=1 {}" % entry_point.name)
     ext_phil_scope = ext_master_scope.get_without_substitution(entry_point.name)
     assert len(ext_phil_scope) == 1
     ext_phil_scope = ext_phil_scope[0]
@@ -99,7 +99,7 @@ for entry_point in itertools.chain(
     basis_vector_search_phil_scope.adopt_scope(ext_master_scope)
     methods.append(entry_point.name)
 basis_vector_search_phil_scope.adopt_scope(
-    libtbx.phil.parse(
+    freephil.parse(
         "method = "
         + " ".join("*" + m if m == "fft3d" else m for m in methods)
         + "\n    .type = choice"

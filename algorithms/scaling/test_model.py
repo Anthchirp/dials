@@ -7,8 +7,7 @@ from unittest.mock import MagicMock, Mock
 
 import pytest
 
-from libtbx import phil
-
+import freephil as phil
 from dials.algorithms.scaling.model.model import (
     ArrayScalingModel,
     DoseDecay,

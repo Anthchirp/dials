@@ -4,7 +4,6 @@ import logging
 import re
 
 import libtbx
-from libtbx.phil import parse
 
 from dials.algorithms.refinement import DialsRefineConfigError
 from dials.algorithms.refinement.constraints import phil_str as constr_phil_str
@@ -18,6 +17,7 @@ from dials.algorithms.refinement.refinement_helpers import string_sel
 from dials.algorithms.refinement.restraints.restraints_parameterisation import (
     uc_phil_str as uc_restraints_phil_str,
 )
+from freephil import parse
 
 from .beam_parameters import BeamParameterisation
 from .crystal_parameters import (

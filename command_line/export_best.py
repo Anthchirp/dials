@@ -3,9 +3,8 @@ from __future__ import absolute_import, division, print_function
 import logging
 import sys
 
-from libtbx.phil import parse
-
 from dials.util import Sorry, log, show_mail_handle_errors
+from freephil import parse
 
 logger = logging.getLogger("dials.command_line.export_best")
 

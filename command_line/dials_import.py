@@ -14,11 +14,11 @@ from dxtbx.model.experiment_list import (
     ExperimentListFactory,
     ExperimentListTemplateImporter,
 )
-from libtbx.phil import parse
 
 from dials.util import Sorry, show_mail_handle_errors
 from dials.util.multi_dataset_handling import generate_experiment_identifiers
 from dials.util.options import flatten_experiments
+from freephil import parse
 
 logger = logging.getLogger("dials.command_line.import")
 

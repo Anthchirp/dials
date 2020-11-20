@@ -8,8 +8,8 @@ import math
 import pytest
 
 from cctbx.sgtbx import space_group
-from libtbx import phil
 
+import freephil as phil
 from dials.algorithms.scaling.error_model.engine import ErrorModelRefinery
 from dials.algorithms.scaling.error_model.error_model import (
     BasicErrorModel,

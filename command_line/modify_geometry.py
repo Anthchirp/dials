@@ -1,13 +1,10 @@
-from __future__ import absolute_import, division, print_function
-
-import libtbx.phil
-
 import dials.util
+import freephil
 
 help_message = """
 """
 
-phil_scope = libtbx.phil.parse(
+phil_scope = freephil.parse(
     """
 include scope dials.util.options.geometry_phil_scope
 output {

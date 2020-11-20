@@ -4,9 +4,9 @@ import pytest
 
 from dxtbx.model import Beam, Crystal, Detector, Experiment, Goniometer, Scan
 from dxtbx.model.experiment_list import ExperimentList
-from libtbx import phil
 from scitbx import sparse
 
+import freephil as phil
 from dials.algorithms.scaling.basis_functions import RefinerCalculator
 from dials.algorithms.scaling.parameter_handler import ScalingParameterManagerGenerator
 from dials.algorithms.scaling.scaler import (

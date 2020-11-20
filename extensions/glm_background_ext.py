@@ -8,7 +8,7 @@ class GLMBackgroundExt(object):
 
     @staticmethod
     def phil():
-        from libtbx.phil import parse
+        from freephil import parse
 
         phil = parse(
             """
@@ -39,9 +39,8 @@ class GLMBackgroundExt(object):
         :param params: The input parameters
         :param experiments: The list of experiments
         """
-        from libtbx.phil import parse
-
         from dials.algorithms.background.glm import BackgroundAlgorithm
+        from freephil import parse
 
         # Create some default parameters
         if params is None:

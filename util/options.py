@@ -13,10 +13,10 @@ from glob import glob
 from orderedset import OrderedSet
 from six.moves.urllib.parse import urlparse
 
-import libtbx.phil
 from dxtbx.model import ExperimentList
 from dxtbx.model.experiment_list import ExperimentListFactory
 
+import freephil
 from dials.array_family import flex
 from dials.util import Sorry
 from dials.util.multi_dataset_handling import (
@@ -33,7 +33,7 @@ except ImportError:
     pickle_errors = (pickle.UnpicklingError,)
 
 
-tolerance_phil_scope = libtbx.phil.parse(
+tolerance_phil_scope = freephil.parse(
     """
 tolerance
     .help = "Tolerances used to determine shared models"
@@ -103,7 +103,7 @@ tolerance
 """
 )
 
-geometry_phil_scope = libtbx.phil.parse(
+geometry_phil_scope = freephil.parse(
     """
 geometry
   .help = "Allow overrides of experimental geometry"
@@ -129,7 +129,7 @@ geometry
 )
 
 
-format_phil_scope = libtbx.phil.parse(
+format_phil_scope = freephil.parse(
     """
 format
   .help = "Options to pass to the Format class"

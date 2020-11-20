@@ -18,12 +18,12 @@ from dxtbx.model.experiment_list import (
     ExperimentList,
     ExperimentListFactory,
 )
-from libtbx.phil import parse
 from libtbx.utils import Abort, Sorry
 
 import dials.util
 from dials.array_family import flex
 from dials.util import log
+from freephil import parse
 
 logger = logging.getLogger("dials.command_line.stills_process")
 

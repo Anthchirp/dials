@@ -55,10 +55,10 @@ Examples::
   dials.report integrated.refl integrated.expt
 """
 
-import libtbx.phil
+import freephil
 
 # Create the phil parameters
-phil_scope = libtbx.phil.parse(
+phil_scope = freephil.parse(
     """
   output {
     html = dials.report.html

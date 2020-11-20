@@ -2,13 +2,12 @@ import json
 import logging
 import sys
 
-import libtbx.phil
-
+import freephil
 from dials.util import detect_blanks, show_mail_handle_errors
 
 logger = logging.getLogger("dials.detect_blanks")
 
-phil_scope = libtbx.phil.parse(
+phil_scope = freephil.parse(
     """\
 phi_step = 2
   .type = float(value_min=0)

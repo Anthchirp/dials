@@ -2,10 +2,9 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-from libtbx.phil import parse
-
 from dials.array_family import flex
 from dials.model.experiment.profile import ProfileModelExt
+from freephil import parse
 
 logger = logging.getLogger(__name__)
 

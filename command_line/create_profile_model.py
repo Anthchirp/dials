@@ -2,9 +2,8 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-from libtbx.phil import parse
-
 from dials.util import show_mail_handle_errors
+from freephil import parse
 
 logger = logging.getLogger("dials.command_line.create_profile_model")
 

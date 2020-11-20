@@ -2,12 +2,12 @@ from __future__ import absolute_import, division, print_function
 
 from itertools import combinations
 
-from libtbx.phil import parse
 from scitbx import matrix
 from scitbx.math import r3_rotation_axis_and_angle_from_matrix
 
 import dials.util
 from dials.util.options import OptionParser, flatten_experiments
+from freephil import parse
 
 help_message = """
 

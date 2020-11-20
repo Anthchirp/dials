@@ -20,9 +20,8 @@ class Sort(object):
 
     def __init__(self):
         """Initialise the script."""
-        from libtbx.phil import parse
-
         from dials.util.options import OptionParser
+        from freephil import parse
 
         phil_scope = parse(
             """

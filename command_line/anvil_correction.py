@@ -30,11 +30,11 @@ import sys
 import numpy as np
 from scipy.spatial.transform import Rotation
 
-import libtbx.phil
 from cctbx.eltbx import attenuation_coefficient
 from dxtbx.model import Experiment
 
 import dials.util.log
+import freephil
 from dials.array_family import flex
 from dials.util.multi_dataset_handling import (
     parse_multiple_datasets,
@@ -52,7 +52,7 @@ else:
 
 logger = logging.getLogger("dials.command_line.anvil_correction")
 
-phil_scope = libtbx.phil.parse(
+phil_scope = freephil.parse(
     u"""
     anvil
         .caption = "Properties of the mounted diamond anvils"
@@ -265,7 +265,7 @@ def correct_intensities_for_dac_attenuation(
 
 
 @dials.util.show_mail_handle_errors()
-def run(args: List[str] = None, phil: libtbx.phil.scope = phil_scope) -> None:
+def run(args: List[str] = None, phil: freephil.scope = phil_scope) -> None:
     """
     Run dials.anvil_correction as from the command line.
 

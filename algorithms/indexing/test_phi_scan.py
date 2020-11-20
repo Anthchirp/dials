@@ -131,9 +131,8 @@ def test_run(dials_regression, tmpdir):
         ]
     )
 
-    from libtbx.phil import parse
-
     from dials.algorithms.refinement.refiner import phil_scope
+    from freephil import parse
 
     params = phil_scope.fetch(source=parse("")).extract()
     from dials.algorithms.refinement.refiner import RefinerFactory

@@ -9,18 +9,18 @@ import wx
 
 import gltbx
 import gltbx.gl as gl
-import libtbx.phil
 import wxtbx.utils
 from dxtbx.model import MultiAxisGoniometer
 from scitbx.array_family import flex
 from scitbx.math import minimum_covering_sphere
 
+import freephil
 from dials.util import show_mail_handle_errors, wx_viewer
 
 help_message = """
 """
 
-phil_scope = libtbx.phil.parse(
+phil_scope = freephil.parse(
     """
   angle = None
     .type = float

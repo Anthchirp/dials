@@ -8,7 +8,6 @@ import pytest
 
 from cctbx.sgtbx import space_group, space_group_symbols
 from dxtbx.model.experiment_list import Experiment, ExperimentList
-from libtbx.phil import parse
 from scitbx import matrix
 
 from dials.algorithms.refinement.parameterisation.beam_parameters import (
@@ -28,6 +27,7 @@ from dials.algorithms.refinement.prediction.managed_predictors import ScansRayPr
 from dials.algorithms.spot_prediction import IndexGenerator, StillsReflectionPredictor
 from dials.array_family import flex
 from dials.test.algorithms.refinement.setup_geometry import Extract
+from freephil import parse
 
 
 class Predictor(object):

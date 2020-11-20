@@ -67,8 +67,7 @@ import warnings
 
 from jinja2 import ChoiceLoader, Environment, PackageLoader
 
-import libtbx.phil
-
+import freephil
 from dials.util import log, resolution_analysis, show_mail_handle_errors
 from dials.util.multi_dataset_handling import parse_multiple_datasets
 from dials.util.options import OptionParser, reflections_and_experiments_from_files
@@ -77,7 +76,7 @@ from dials.util.version import dials_version
 logger = logging.getLogger("dials.estimate_resolution")
 
 
-phil_scope = libtbx.phil.parse(
+phil_scope = freephil.parse(
     """
 include scope dials.util.resolution_analysis.phil_defaults
 

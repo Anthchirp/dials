@@ -42,9 +42,9 @@ from jinja2 import ChoiceLoader, Environment, PackageLoader
 
 from cctbx import crystal, miller
 from iotbx import mtz
-from libtbx import phil
 from scitbx.array_family import flex
 
+import freephil as phil
 from dials.command_line.symmetry import median_unit_cell
 from dials.pychef import Statistics, batches_to_dose, interpret_images_to_doses_options
 from dials.util import log, resolution_analysis, show_mail_handle_errors

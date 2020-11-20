@@ -2,7 +2,6 @@ from __future__ import absolute_import, division, print_function
 
 from collections import namedtuple
 
-from libtbx.phil import parse
 from scitbx import sparse
 from scitbx.array_family import flex
 
@@ -13,6 +12,7 @@ from dials.algorithms.refinement.restraints.restraints import (
     MedianUnitCellTie,
     SingleUnitCellTie,
 )
+from freephil import parse
 
 # PHIL options for unit cell restraints
 uc_phil_str = """

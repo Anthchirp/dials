@@ -8,7 +8,6 @@ import random
 import warnings
 
 import libtbx
-from libtbx.phil import parse
 from scitbx import matrix
 from scitbx.math import five_number_summary
 
@@ -23,6 +22,7 @@ from dials.algorithms.refinement.refinement_helpers import (
     set_obs_s1,
 )
 from dials.array_family import flex
+from freephil import parse
 
 logger = logging.getLogger(__name__)
 

@@ -7,8 +7,8 @@ from unittest.mock import MagicMock, Mock
 import pytest
 
 from dxtbx.model import Crystal
-from libtbx import phil
 
+import freephil as phil
 from dials.algorithms.scaling.scaler import (
     MultiScaler,
     NullScaler,

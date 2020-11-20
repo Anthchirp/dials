@@ -6,7 +6,6 @@ import logging
 import math
 
 import libtbx
-import libtbx.phil
 import scitbx.matrix
 from cctbx import crystal, miller, sgtbx
 from cctbx.crystal_orientation import crystal_orientation
@@ -18,6 +17,7 @@ from rstbx.symmetry.subgroup import MetricSubgroup
 from scitbx.array_family import flex
 
 import dials.util
+import freephil
 from dials.algorithms.indexing.refinement import refine
 from dials.command_line.check_indexing_symmetry import (
     get_symop_correlation_coefficients,
@@ -27,7 +27,7 @@ from dials.util.log import LoggingContext
 logger = logging.getLogger(__name__)
 
 
-phil_scope = libtbx.phil.parse(
+phil_scope = freephil.parse(
     """
 lepage_max_delta = 5
   .type = float
@@ -49,7 +49,7 @@ include scope dials.algorithms.refinement.refiner.phil_scope
 
 # override default refinement parameters
 phil_scope = phil_scope.fetch(
-    source=libtbx.phil.parse(
+    source=freephil.parse(
         """\
 refinement {
   reflections {

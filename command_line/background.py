@@ -118,10 +118,10 @@ def run(args=None):
 
 
 def background(imageset, indx, n_bins, corrected=False, mask_params=None):
-    from libtbx.phil import parse
     from scitbx import matrix
 
     from dials.array_family import flex
+    from freephil import parse
 
     if mask_params is None:
         # Default mask params for trusted range

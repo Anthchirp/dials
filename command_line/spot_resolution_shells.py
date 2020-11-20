@@ -1,8 +1,7 @@
 from __future__ import absolute_import, division, print_function
 
-import libtbx.phil
-
 import dials.util
+import freephil
 
 help_message = """
 
@@ -13,7 +12,7 @@ Examples::
   dials.spot_resolution_shells models.expt strong.refl
 """
 
-phil_scope = libtbx.phil.parse(
+phil_scope = freephil.parse(
     """
   shells = 100
     .type = int(value_min=1)

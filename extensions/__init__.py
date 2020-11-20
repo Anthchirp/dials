@@ -35,7 +35,7 @@ class _Extension(object):
 
         :returns: The phil scope for the interface or extension
         """
-        from libtbx.phil import parse
+        from freephil import parse
 
         if cls == _Extension:
             raise RuntimeError("Extension has no phil parameters")

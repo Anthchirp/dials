@@ -4,7 +4,7 @@ import itertools
 import math
 import random
 
-from libtbx.phil import parse
+from freephil import parse
 
 master_phil = parse(
     """
@@ -421,7 +421,7 @@ def main(params):
 if __name__ == "__main__":
     import sys
 
-    from libtbx.phil import command_line
+    from freephil import command_line
 
     cmd = command_line.argument_interpreter(master_params=master_phil)
     working_phil = cmd.process_and_fetch(args=sys.argv[1:])

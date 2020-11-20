@@ -10,9 +10,8 @@ class Script(object):
 
     def __init__(self):
         """Initialise the script."""
-        from libtbx.phil import parse
-
         from dials.util.options import OptionParser
+        from freephil import parse
 
         # Create the phil parameters
         phil_scope = parse(

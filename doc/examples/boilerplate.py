@@ -10,9 +10,6 @@ from __future__ import absolute_import, division, print_function
 import logging
 import sys
 
-# We need to parse command-line arguments to PHIL scopes.
-import libtbx.phil
-
 # Information about the experiment geometry and meta-data are recorded in
 # dxtbx.model.Experiment objects, collated in ExperimentList objects.
 from dxtbx.model import ExperimentList
@@ -23,6 +20,9 @@ import dials.util
 # The logging module is used to raise log messages.  Additionally, dials.util.log
 # sets up handlers and filters for a consistent logging style across DIALS.
 import dials.util.log
+
+# We need to parse command-line arguments to PHIL scopes.
+import freephil
 
 # Often, we deal with flex arrays and reflection tables to handle reflection data.
 from dials.array_family import flex
@@ -46,7 +46,7 @@ except ImportError:
 logger = logging.getLogger("dials.boilerplate")
 
 # Define the master PHIL scope for this program.
-phil_scope = libtbx.phil.parse(
+phil_scope = freephil.parse(
     """
     output {
         reflections = stronger.refl
@@ -66,7 +66,7 @@ phil_scope = libtbx.phil.parse(
 def do_boilerplate(
     experiments,  # type: ExperimentList
     reflections,  # type: flex.reflection_table
-    params,  # type: libtbx.phil.scope_extract
+    params,  # type: freephil.scope_extract
 ):  # type: (...) -> (ExperimentList, flex.reflection_table)
     """
     Write the behaviour of the program as functions and classes outside run().
@@ -105,7 +105,7 @@ def do_boilerplate(
 
 
 @dials.util.show_mail_on_error()
-def run(args: List[str] = None, phil: libtbx.phil.scope = phil_scope) -> None:
+def run(args: List[str] = None, phil: freephil.scope = phil_scope) -> None:
     """
     Check command-line input and call other functions to do the legwork.
 

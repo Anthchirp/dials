@@ -17,10 +17,10 @@ import logging
 import sys
 from typing import List
 
-import libtbx.phil
 from cctbx import uctbx
 
 import dials.util.log
+import freephil
 from dials.report.analysis import scaled_data_as_miller_array
 from dials.util import missing_reflections, tabulate
 from dials.util.filter_reflections import filtered_arrays_from_experiments_reflections
@@ -29,7 +29,7 @@ from dials.util.version import dials_version
 
 logger = logging.getLogger("dials.missing_reflections")
 
-phil_scope = libtbx.phil.parse(
+phil_scope = freephil.parse(
     """
     min_component_size = 0
       .type = int(value_min=0)
@@ -43,7 +43,7 @@ phil_scope = libtbx.phil.parse(
 
 
 @dials.util.show_mail_handle_errors()
-def run(args: List[str] = None, phil: libtbx.phil.scope = phil_scope) -> None:
+def run(args: List[str] = None, phil: freephil.scope = phil_scope) -> None:
     usage = "dials.missing_reflections [options] scaled.expt scaled.refl"
 
     parser = OptionParser(

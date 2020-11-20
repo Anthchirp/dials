@@ -9,9 +9,9 @@ from unittest.mock import MagicMock, Mock, patch
 import pytest
 
 from dxtbx.model import Crystal, Experiment, Scan
-from libtbx import phil
 from scitbx import sparse
 
+import freephil as phil
 from dials.algorithms.scaling.active_parameter_managers import (
     multi_active_parameter_manager,
 )

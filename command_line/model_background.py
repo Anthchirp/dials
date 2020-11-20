@@ -5,10 +5,9 @@ import sys
 
 import six.moves.cPickle as pickle
 
-from libtbx.phil import parse
-
 import dials.util
 import dials.util.log
+from freephil import parse
 
 logger = logging.getLogger("dials.command_line.model_background")
 

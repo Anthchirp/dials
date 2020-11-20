@@ -10,9 +10,9 @@ import pytest
 
 from dxtbx.model import Crystal, Experiment
 from dxtbx.serialize import load
-from libtbx import phil
 from scitbx.sparse import matrix  # noqa: F401 - Needed to call calc_theta_phi
 
+import freephil as phil
 from dials.algorithms.scaling.scaling_library import create_scaling_model
 from dials.algorithms.scaling.scaling_utilities import (
     Reasons,

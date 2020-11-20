@@ -1,11 +1,8 @@
-from __future__ import absolute_import, division, print_function
-
 import wx
 from wx.lib.agw import floatspin
 
 import gltbx
 import gltbx.gl as gl
-import libtbx.phil
 import wxtbx.utils
 from scitbx.array_family import flex
 from scitbx.math import minimum_covering_sphere
@@ -15,10 +12,11 @@ from wxtbx.segmentedctrl import (
     SegmentedToggleControl,
 )
 
+import freephil
 from dials.util import wx_viewer
 from dials.util.reciprocal_lattice import Render3d
 
-phil_scope = libtbx.phil.parse(
+phil_scope = freephil.parse(
     """
 include scope dials.util.reciprocal_lattice.phil_scope
 

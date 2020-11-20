@@ -4,8 +4,6 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-from libtbx.phil import parse
-
 from dials.algorithms.shoebox import MaskCode
 from dials.algorithms.spot_finding import per_image_analysis
 from dials.array_family import flex
@@ -14,6 +12,7 @@ from dials.util.ascii_art import spot_counts_per_image_plot
 from dials.util.multi_dataset_handling import generate_experiment_identifiers
 from dials.util.options import OptionParser, flatten_experiments
 from dials.util.version import dials_version
+from freephil import parse
 
 logger = logging.getLogger("dials.command_line.find_spots")
 

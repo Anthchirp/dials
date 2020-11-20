@@ -20,7 +20,6 @@ def test(args=[]):
     # We will set up a mock scan and a mock experiment list
     from dxtbx.model import ScanFactory
     from dxtbx.model.experiment_list import Experiment, ExperimentList
-    from libtbx.phil import parse
     from libtbx.test_utils import approx_equal
     from rstbx.symmetry.constraints.parameter_reduction import symmetrize_reduce_enlarge
     from scitbx import matrix
@@ -47,6 +46,7 @@ def test(args=[]):
 
     # Reflection prediction
     from dials.algorithms.spot_prediction import IndexGenerator, ray_intersection
+    from freephil import parse
 
     #############################
     # Setup experimental models #

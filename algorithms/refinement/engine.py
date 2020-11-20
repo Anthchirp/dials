@@ -10,12 +10,12 @@ import logging
 
 import libtbx
 from libtbx import easy_mp
-from libtbx.phil import parse
 from scitbx import lbfgs
 from scitbx.array_family import flex
 from scitbx.lstbx import normal_eqns, normal_eqns_solving
 
 from dials.algorithms.refinement import DialsRefineRuntimeError
+from freephil import parse
 
 logger = logging.getLogger(__name__)
 

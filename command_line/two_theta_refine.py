@@ -9,7 +9,6 @@ import sys
 import iotbx.cif.model
 from cctbx import miller, sgtbx
 from dxtbx.model.experiment_list import Experiment, ExperimentList
-from libtbx.phil import parse
 from libtbx.utils import format_float_with_standard_uncertainty
 
 import dials.util
@@ -35,6 +34,7 @@ from dials.util.filter_reflections import filter_reflection_table
 from dials.util.multi_dataset_handling import parse_multiple_datasets
 from dials.util.options import OptionParser, reflections_and_experiments_from_files
 from dials.util.version import dials_version
+from freephil import parse
 
 logger = logging.getLogger("dials.command_line.two_theta_refine")
 

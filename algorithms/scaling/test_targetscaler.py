@@ -10,8 +10,8 @@ from math import log
 import pytest
 
 from dxtbx.model import Crystal, Experiment, ExperimentList
-from libtbx import phil
 
+import freephil as phil
 from dials.algorithms.scaling.model.model import KBScalingModel
 from dials.algorithms.scaling.scaler_factory import TargetScalerFactory
 from dials.algorithms.scaling.scaling_library import scale_against_target

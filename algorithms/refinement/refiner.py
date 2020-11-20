@@ -11,7 +11,6 @@ import psutil
 
 import libtbx
 from dxtbx.model.experiment_list import ExperimentList
-from libtbx.phil import parse
 
 import dials.util
 from dials.algorithms.refinement import DialsRefineConfigError
@@ -39,6 +38,7 @@ from dials.algorithms.refinement.restraints import RestraintsParameterisation
 from dials.algorithms.refinement.target import TargetFactory
 from dials.algorithms.refinement.target import phil_str as target_phil_str
 from dials.array_family import flex
+from freephil import parse
 
 logger = logging.getLogger(__name__)
 

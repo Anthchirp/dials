@@ -4,8 +4,8 @@ from unittest import mock
 
 from dxtbx.model import Crystal, Experiment, Scan
 from dxtbx.model.experiment_list import ExperimentList
-from libtbx import phil
 
+import freephil as phil
 from dials.algorithms.scaling.model.model import KBScalingModel
 from dials.algorithms.scaling.scale_and_filter import AnalysisResults, log_cycle_results
 from dials.algorithms.statistics.cc_half_algorithm import CCHalfFromDials, DeltaCCHalf

@@ -3,10 +3,10 @@ from __future__ import absolute_import, division, print_function
 import math
 
 from cctbx.crystal import symmetry
-from libtbx.phil import parse
 
 from dials.array_family import flex
 from dials.util import tabulate
+from freephil import parse
 
 """
 Class to find a reasonable cutoff for integration based on work in LABELIT.

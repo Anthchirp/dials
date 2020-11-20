@@ -8,7 +8,7 @@ class MedianBackgroundExt(object):
 
     @staticmethod
     def phil():
-        from libtbx.phil import parse
+        from freephil import parse
 
         return parse("")
 

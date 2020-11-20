@@ -17,7 +17,7 @@ from dials.algorithms.refinement.reflection_manager import BlockCalculator
 def create_experiments(image_start=1):
 
     # Create models
-    from libtbx.phil import parse
+    from freephil import parse
 
     overrides = """geometry.parameters.crystal.a.length.range = 10 50
   geometry.parameters.crystal.b.length.range = 10 50

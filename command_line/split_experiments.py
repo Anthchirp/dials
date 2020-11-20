@@ -3,13 +3,13 @@ from __future__ import absolute_import, division, print_function
 import functools
 
 from dxtbx.model.experiment_list import ExperimentList
-from libtbx.phil import parse
 
 import dials.util
 from dials.array_family import flex
 from dials.util import Sorry
 from dials.util.export_mtz import match_wavelengths
 from dials.util.options import OptionParser, reflections_and_experiments_from_files
+from freephil import parse
 
 help_message = """
 

@@ -12,7 +12,6 @@ import logging
 
 from dxtbx.model import MosaicCrystalSauter2014
 from dxtbx.model.experiment_list import Experiment, ExperimentList
-from libtbx.phil import parse
 from scitbx import matrix
 
 from dials.algorithms.refinement.prediction.managed_predictors import (
@@ -22,6 +21,7 @@ from dials.array_family import flex
 from dials.model.data import Shoebox
 from dials.util import show_mail_handle_errors
 from dials.util.options import OptionParser, reflections_and_experiments_from_files
+from freephil import parse
 
 logger = logging.getLogger("dials.command_line.sequence_to_stills")
 

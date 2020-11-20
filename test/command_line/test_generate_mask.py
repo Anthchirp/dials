@@ -4,8 +4,8 @@ import pytest
 import six.moves.cPickle as pickle
 
 from dxtbx.model import ExperimentList
-from libtbx import phil
 
+import freephil as phil
 from dials.command_line.dials_import import Script as ImportScript
 from dials.command_line.dials_import import phil_scope as import_phil_scope
 from dials.command_line.generate_mask import generate_mask, phil_scope

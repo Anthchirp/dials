@@ -16,9 +16,9 @@ import sys
 
 from jinja2 import ChoiceLoader, Environment, PackageLoader
 
-import libtbx.phil
 from iotbx import phil
 
+import freephil
 from dials.algorithms.scaling.combine_intensities import combine_intensities
 from dials.algorithms.scaling.error_model.engine import run_error_model_refinement
 from dials.algorithms.scaling.error_model.error_model import (
@@ -164,7 +164,7 @@ def make_output(model, params):
 
 
 @show_mail_handle_errors()
-def run(args: List[str] = None, phil: libtbx.phil.scope = phil_scope) -> None:
+def run(args: List[str] = None, phil: freephil.scope = phil_scope) -> None:
     """Run the scaling from the command-line."""
     usage = """Usage: dials.refine_error_model scaled.refl scaled.expt [options]"""
 

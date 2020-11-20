@@ -5,11 +5,11 @@ from __future__ import absolute_import, division, print_function
 import logging
 import math
 
-import libtbx.phil
 from scitbx import matrix
 from scitbx.array_family import flex
 
 import dials.util
+import freephil
 from dials.algorithms.indexing.indexer import find_max_cell
 from dials.command_line.search_beam_position import run_dps
 from dials.util.reciprocal_lattice import Render3d
@@ -34,7 +34,7 @@ Examples::
   dials.rl_png indexed.expt indexed.refl
 """
 
-phil_scope = libtbx.phil.parse(
+phil_scope = freephil.parse(
     """
 include scope dials.util.reciprocal_lattice.phil_scope
 

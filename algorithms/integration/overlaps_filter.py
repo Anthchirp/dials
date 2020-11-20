@@ -1,8 +1,7 @@
 from __future__ import absolute_import, division, print_function
 
-from libtbx.phil import parse
-
 from dials.array_family import flex
+from freephil import parse
 
 phil_scope = parse(
     """

@@ -5,12 +5,12 @@ import logging
 import math
 import operator
 
-import libtbx.phil
 from cctbx import miller
 from dxtbx.model import Crystal
 from scitbx import matrix
 from scitbx.math import least_squares_plane, superpose
 
+import freephil
 from dials.algorithms.indexing import DialsIndexError
 from dials.array_family import flex
 
@@ -121,7 +121,7 @@ class LowResSpotMatch(Strategy):
     based on resolution and reciprocal space distance between observed spots.
     """
 
-    phil_scope = libtbx.phil.parse(low_res_spot_match_phil_str)
+    phil_scope = freephil.parse(low_res_spot_match_phil_str)
 
     def __init__(
         self, target_symmetry_primitive, max_lattices, params=None, *args, **kwargs

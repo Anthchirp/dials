@@ -12,8 +12,9 @@ import sys
 import time
 import urllib.parse
 
-import libtbx.phil
+import libtbx
 
+import freephil
 from dials.util import Sorry, show_mail_handle_errors
 
 logger = logging.getLogger("dials.command_line.find_spots_server")
@@ -72,7 +73,7 @@ def work(filename, cl=None):
     if cl is None:
         cl = []
 
-    phil_scope = libtbx.phil.parse(
+    phil_scope = freephil.parse(
         """\
 ice_rings {
   filter = True
@@ -303,7 +304,7 @@ def serve(httpd):
         pass
 
 
-phil_scope = libtbx.phil.parse(
+phil_scope = freephil.parse(
     """\
 nproc = Auto
   .type = int(value_min=1)

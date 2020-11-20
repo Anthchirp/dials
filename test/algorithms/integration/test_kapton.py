@@ -6,9 +6,9 @@ import pytest
 
 import libtbx
 from dxtbx.model.experiment_list import ExperimentListFactory
-from libtbx.phil import parse
 
 from dials.array_family import flex
+from freephil import parse
 
 
 def test_kapton(run_in_tmpdir):

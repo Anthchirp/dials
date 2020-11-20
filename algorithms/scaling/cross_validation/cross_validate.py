@@ -44,7 +44,7 @@ import time
 
 import six
 
-from libtbx import phil
+import freephil as phil
 
 logger = logging.getLogger("dials")
 

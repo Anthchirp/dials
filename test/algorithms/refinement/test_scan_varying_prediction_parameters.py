@@ -33,9 +33,9 @@ from dials.algorithms.refinement.prediction.managed_predictors import (
 class _Test(object):
     def create_models(self, cmdline_overrides=None):
         from dxtbx.model import ScanFactory
-        from libtbx.phil import parse
 
         from dials.test.algorithms.refinement.setup_geometry import Extract
+        from freephil import parse
 
         if cmdline_overrides is None:
             cmdline_overrides = []

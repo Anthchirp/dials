@@ -10,7 +10,6 @@ import os
 
 
 def test(dials_regression):
-    from libtbx.phil import parse
     from libtbx.test_utils import approx_equal
     from scitbx import matrix
 
@@ -21,6 +20,7 @@ def test(dials_regression):
 
     # Get modules to build models and minimiser using PHIL
     from dials.test.algorithms.refinement import setup_geometry
+    from freephil import parse
 
     # Symmetry constrained parameterisation for the unit cell
     DEG2RAD = math.pi / 180.0

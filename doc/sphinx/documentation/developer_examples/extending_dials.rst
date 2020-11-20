@@ -183,7 +183,7 @@ an implementation of the ``find_basis_vectors`` method.
 
 .. code-block:: python
 
-  from libtbx import phil
+  import freephil as phil
   from dials.algorithms.indexing.basis_vector_search.strategies import Strategy
 
   mystrategy_phil_str = """\
@@ -238,7 +238,7 @@ delegated to the strategy.
 
 .. code-block:: python
 
-  from libtbx import phil
+  import freephil as phil
   from dials.algorithms.indexing.lattice_search_strategies import Strategy
 
   mystrategy_phil_str = """\
@@ -310,7 +310,7 @@ inherit from
 
 .. code-block:: python
 
-  from libtbx import phil
+  import freephil as phil
   from scitbx.array_family import flex
   from dials.algorithms.scaling.model.model import ScalingModelBase
   from mypath.components import SpecialComponent

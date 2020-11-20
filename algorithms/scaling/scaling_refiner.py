@@ -7,8 +7,6 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-from libtbx.phil import parse
-
 from dials.algorithms.refinement.engine import (
     GaussNewtonIterations,
     LevenbergMarquardtIterations,
@@ -16,6 +14,7 @@ from dials.algorithms.refinement.engine import (
 )
 from dials.algorithms.scaling.scaling_utilities import log_memory_usage
 from dials.util import tabulate
+from freephil import parse
 
 logger = logging.getLogger("dials")
 

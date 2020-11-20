@@ -4,11 +4,11 @@ import logging
 import re
 from functools import reduce
 
-from libtbx.phil import parse
 from scitbx import sparse
 from scitbx.array_family import flex
 
 from dials.algorithms.refinement import DialsRefineConfigError
+from freephil import parse
 
 logger = logging.getLogger(__name__)
 

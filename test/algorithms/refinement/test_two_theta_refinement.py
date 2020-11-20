@@ -75,10 +75,9 @@ def generate_reflections(experiments):
 def test_fd_derivatives():
     """Test derivatives of the prediction equation"""
 
-    from libtbx.phil import parse
-
     # Import model builder
     from dials.test.algorithms.refinement.setup_geometry import Extract
+    from freephil import parse
 
     # Create models
     overrides = """geometry.parameters.crystal.a.length.range = 10 50

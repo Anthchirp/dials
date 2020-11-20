@@ -27,7 +27,6 @@ import math
 import sys
 
 from dxtbx.model.experiment_list import Experiment, ExperimentList
-from libtbx.phil import parse
 
 import dials.util.log
 from dials.algorithms.integration.integrator import create_integrator
@@ -38,6 +37,7 @@ from dials.util.command_line import heading
 from dials.util.options import OptionParser, reflections_and_experiments_from_files
 from dials.util.slice import slice_crystal
 from dials.util.version import dials_version
+from freephil import parse
 
 logger = logging.getLogger("dials.command_line.integrate")
 

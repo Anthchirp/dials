@@ -3,10 +3,9 @@ from __future__ import absolute_import, division, print_function
 import logging
 from math import pi
 
-from libtbx.phil import parse
-
 from dials.array_family import flex
 from dials.util import tabulate
+from freephil import parse
 
 logger = logging.getLogger(__name__)
 

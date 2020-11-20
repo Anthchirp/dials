@@ -6,9 +6,9 @@ import itertools
 from unittest.mock import Mock
 
 from cctbx import sgtbx, uctbx
-from libtbx import phil
 from scitbx import sparse
 
+import freephil as phil
 from dials.algorithms.scaling.Ih_table import IhTable
 from dials.algorithms.scaling.reflection_selection import (
     _loop_over_class_matrix,

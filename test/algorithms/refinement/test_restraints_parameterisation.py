@@ -7,11 +7,11 @@ import random
 import pytest
 
 from dxtbx.model.experiment_list import ExperimentListFactory
-from libtbx.phil import parse
 
 from dials.algorithms.refinement import RefinerFactory
 from dials.algorithms.refinement.restraints import RestraintsParameterisation
 from dials.array_family import flex
+from freephil import parse
 
 
 def test_single_crystal_restraints_gradients():

@@ -5,12 +5,11 @@ import os
 
 import matplotlib
 
-from libtbx.phil import parse
-
 import dials.util
 from dials.algorithms.refinement.rotation_decomposition import (
     solve_r3_rotation_for_angles_given_axes,
 )
+from freephil import parse
 
 matplotlib.use("Agg")
 import matplotlib.gridspec as gridspec

@@ -12,9 +12,10 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-import libtbx.phil
+import libtbx
 
 import dials.util
+import freephil
 
 
 def work(host, port, filename, params):
@@ -188,7 +189,7 @@ def stop(host, port, nproc):
     return stopped
 
 
-phil_scope = libtbx.phil.parse(
+phil_scope = freephil.parse(
     """\
 nproc = Auto
   .type = int(value_min=1)

@@ -20,8 +20,9 @@ import iotbx.merging_statistics
 from cctbx import crystal, miller, uctbx
 from dxtbx.model import Experiment
 from iotbx import cif, mtz
-from libtbx import Auto, phil
+from libtbx import Auto
 
+import freephil as phil
 from dials.algorithms.scaling.Ih_table import IhTable
 from dials.algorithms.scaling.model.model import KBScalingModel, PhysicalScalingModel
 from dials.algorithms.scaling.scaling_utilities import (

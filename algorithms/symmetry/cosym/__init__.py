@@ -133,7 +133,7 @@ class CosymAnalysis(symmetry_base, Subject):
         Args:
           intensities (cctbx.miller.array): The intensities on which to perform
             cosym anaylsis.
-          params (libtbx.phil.scope_extract): Parameters for the analysis.
+          params (freephil.scope_extract): Parameters for the analysis.
         """
         super(CosymAnalysis, self).__init__(
             intensities,
