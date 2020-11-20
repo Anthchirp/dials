@@ -69,13 +69,13 @@ class atom_selection_converter(freephil.converters.qstr_converters):
         return freephil.qstr_converters.from_words(self, words, master)
 
 
-#default_converter_registry = freephil.extended_converter_registry(
+# default_converter_registry = freephil.extended_converter_registry(
 #    additional_converters=[
 ##        unit_cell_converter,
 #        space_group_converter,
 #        atom_selection_converter,
 #    ]
-#)
+# )
 
 
 def _parse(
@@ -95,10 +95,13 @@ def _parse(
         process_includes=process_includes,
     )
 
+
 def _parse(*args, **kwargs):
-   return freephil.parse(*args,**kwargs)
+    return freephil.parse(*args, **kwargs)
+
 
 parse = _parse
+
 
 def read_default(
     caller_file_name,
