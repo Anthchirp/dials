@@ -7,9 +7,9 @@ import copy
 import logging
 import sys
 
-import iotbx.phil
 from dxtbx.model.experiment_list import ExperimentList
 
+import freephil
 from dials.algorithms.indexing import DialsIndexError, indexer
 from dials.array_family import flex
 from dials.util import log, show_mail_handle_errors
@@ -53,7 +53,7 @@ Examples::
 """
 
 
-phil_scope = iotbx.phil.parse(
+phil_scope = freephil.parse(
     """\
 include scope dials.algorithms.indexing.indexer.phil_scope
 
@@ -90,7 +90,7 @@ output {
 
 # override default refinement parameters
 phil_overrides = phil_scope.fetch(
-    source=iotbx.phil.parse(
+    source=freephil.parse(
         """\
 refinement {
     reflections {

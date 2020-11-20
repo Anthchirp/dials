@@ -5,10 +5,10 @@ import sys
 
 from six.moves import cStringIO as StringIO
 
-from iotbx.phil import parse
 from libtbx import Auto
 
 from dials.util import log, show_mail_handle_errors
+from freephil import parse
 
 logger = logging.getLogger("dials.command_line.export")
 

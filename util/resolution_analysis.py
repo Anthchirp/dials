@@ -12,12 +12,12 @@ from collections import OrderedDict
 
 import iotbx.merging_statistics
 import iotbx.mtz
-import iotbx.phil
 from cctbx import miller, uctbx
 from cctbx.array_family import flex
 from iotbx.reflection_file_utils import label_table
 from scitbx.math import curve_fitting, five_number_summary
 
+import freephil
 from dials.algorithms.scaling.scaling_library import determine_best_unit_cell
 from dials.report import plots
 from dials.util import Sorry, tabulate
@@ -391,7 +391,7 @@ phil_str = """
 """
 
 
-phil_defaults = iotbx.phil.parse(
+phil_defaults = freephil.parse(
     """
 resolution {
 %s

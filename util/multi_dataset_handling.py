@@ -13,9 +13,9 @@ from dials.array_family import flex
 
 logger = logging.getLogger("dials")
 
-import iotbx.phil
+import freephil
 
-phil_scope = iotbx.phil.parse(
+phil_scope = freephil.parse(
     """
   dataset_selection {
     use_datasets = None

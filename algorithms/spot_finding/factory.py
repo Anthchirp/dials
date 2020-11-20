@@ -5,13 +5,13 @@ import time
 import numpy as np
 
 from dxtbx.imageset import ImageSequence
-from iotbx.phil import parse
 
 import dials.extensions
 from dials.algorithms.background.simple import Linear2dModeller
 from dials.algorithms.spot_finding.finder import SpotFinder
 from dials.array_family import flex
 from dials.util.masking import MaskGenerator
+from freephil import parse
 
 logger = logging.getLogger(__name__)
 

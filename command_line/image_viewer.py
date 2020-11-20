@@ -5,9 +5,8 @@ from __future__ import absolute_import, division, print_function
 import pickle
 import sys
 
-import iotbx.phil
-
 import dials.util.log
+import freephil
 from dials.util.image_viewer.spotfinder_wrap import spot_wrapper
 from dials.util.options import OptionParser, flatten_experiments, flatten_reflections
 
@@ -27,7 +26,7 @@ Examples::
   dials.image_viewer models.expt integrated.refl
 """
 
-phil_scope = iotbx.phil.parse(
+phil_scope = freephil.parse(
     """\
 brightness = 100
   .type = int

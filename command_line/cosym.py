@@ -4,10 +4,10 @@ import logging
 import random
 import sys
 
-import iotbx.phil
 from cctbx import sgtbx
 from xfel.clustering.cluster_groups import unit_cell_info
 
+import freephil
 from dials.algorithms.clustering.unit_cell import UnitCellCluster
 from dials.algorithms.symmetry.cosym import CosymAnalysis
 from dials.algorithms.symmetry.cosym.observers import register_default_cosym_observers
@@ -31,7 +31,7 @@ from dials.util.version import dials_version
 
 logger = logging.getLogger("dials.command_line.cosym")
 
-phil_scope = iotbx.phil.parse(
+phil_scope = freephil.parse(
     """\
 partiality_threshold = 0.4
   .type = float

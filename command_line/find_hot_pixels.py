@@ -2,14 +2,13 @@ from __future__ import absolute_import, division, print_function
 
 import logging
 
-import iotbx.phil
-
 import dials.util
+import freephil
 from dials.util.options import OptionParser, reflections_and_experiments_from_files
 
 logger = logging.getLogger("dials.command_line.find_hot_pixels")
 
-phil_scope = iotbx.phil.parse(
+phil_scope = freephil.parse(
     """\
 output {
   mask = hot_pixels.pickle

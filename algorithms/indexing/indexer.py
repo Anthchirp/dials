@@ -7,12 +7,12 @@ import math
 
 import pkg_resources
 
-import iotbx.phil
 import libtbx
 from cctbx import sgtbx
 from dxtbx.model import ExperimentList, ImageSequence
 
 import dials.util
+import freephil
 from dials.algorithms.indexing import (
     DialsIndexError,
     DialsIndexRefineError,
@@ -297,7 +297,7 @@ indexing {
     % max_cell_phil_str
 )
 
-phil_scope = iotbx.phil.parse(phil_str, process_includes=True)
+phil_scope = freephil.parse(phil_str, process_includes=True)
 
 
 class Indexer(object):

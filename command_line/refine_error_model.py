@@ -16,9 +16,8 @@ import sys
 
 from jinja2 import ChoiceLoader, Environment, PackageLoader
 
-from iotbx import phil
-
 import freephil
+import freephil as phil
 from dials.algorithms.scaling.combine_intensities import combine_intensities
 from dials.algorithms.scaling.error_model.engine import run_error_model_refinement
 from dials.algorithms.scaling.error_model.error_model import (

@@ -5,8 +5,7 @@ import sys
 
 from PIL import Image
 
-import iotbx.phil
-
+import freephil
 from dials.algorithms.image.threshold import DispersionThresholdDebug
 from dials.array_family import flex
 from dials.util import Sorry, show_mail_handle_errors
@@ -33,7 +32,7 @@ Examples::
   dials.export_bitmaps image.cbf display=variance colour_scheme=inverse_greyscale
 """
 
-phil_scope = iotbx.phil.parse(
+phil_scope = freephil.parse(
     """
 binning = 1
   .type = int(value_min=1)

@@ -1,10 +1,10 @@
 from __future__ import absolute_import, division, print_function
 
-import iotbx.phil
 from cctbx.array_family import flex
 
 import dials.algorithms.indexing.compare_orientation_matrices
 import dials.util
+import freephil
 from dials.util.options import OptionParser, flatten_experiments
 
 help_message = """
@@ -25,7 +25,7 @@ Examples::
 """
 
 
-phil_scope = iotbx.phil.parse(
+phil_scope = freephil.parse(
     """
 hkl = None
   .type = ints(size=3)

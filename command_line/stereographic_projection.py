@@ -8,12 +8,12 @@ import sys
 
 import matplotlib
 
-import iotbx.phil
 from cctbx import crystal, miller
 from cctbx.array_family import flex
 from scitbx import matrix
 
 import dials.util
+import freephil
 
 help_message = """
 
@@ -36,7 +36,7 @@ Examples::
   dials.stereographic_projection indexed_1.expt indexed_2.expt hkl=1,0,0 expand_to_p1=True
 """
 
-phil_scope = iotbx.phil.parse(
+phil_scope = freephil.parse(
     """
 hkl = None
   .type = ints(size=3)

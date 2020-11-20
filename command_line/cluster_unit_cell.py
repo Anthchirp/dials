@@ -5,18 +5,18 @@ from __future__ import absolute_import, division, print_function
 import os
 
 import iotbx.mtz
-import iotbx.phil
 from cctbx import crystal
 from xfel.clustering.cluster import Cluster
 from xfel.clustering.cluster_groups import unit_cell_info
 
 import dials.util
+import freephil
 from dials.util.options import OptionParser, flatten_experiments
 
 help_message = """
 """
 
-phil_scope = iotbx.phil.parse(
+phil_scope = freephil.parse(
     """
 threshold = 5000
   .type = float(value_min=0)

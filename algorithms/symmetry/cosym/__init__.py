@@ -15,13 +15,13 @@ from collections import OrderedDict
 
 import numpy as np
 
-import iotbx.phil
 from cctbx import sgtbx
 from libtbx import Auto
 from scitbx import matrix
 from scitbx.array_family import flex
 
 import dials.util
+import freephil
 from dials.algorithms.indexing.symmetry import find_matching_symmetry
 from dials.algorithms.symmetry import symmetry_base
 from dials.algorithms.symmetry.cosym import engine, target
@@ -30,7 +30,7 @@ from dials.util.observer import Subject
 
 logger = logging.getLogger(__name__)
 
-phil_scope = iotbx.phil.parse(
+phil_scope = freephil.parse(
     """\
 
 normalisation = kernel quasi *ml_iso ml_aniso

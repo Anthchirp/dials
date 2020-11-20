@@ -7,13 +7,13 @@ import copy
 import json
 import sys
 
-import iotbx.phil
 from cctbx import sgtbx
 from dxtbx.model import MultiAxisGoniometer
 from rstbx.cftbx.coordinate_frame_helpers import align_reference_frame
 from scitbx import matrix
 
 import dials.util
+import freephil
 from dials.algorithms.refinement import rotation_decomposition
 from dials.util import tabulate
 from dials.util.options import OptionParser, flatten_experiments
@@ -41,7 +41,7 @@ Examples::
   dials.align_crystal models.expt frame=direct
 """
 
-phil_scope = iotbx.phil.parse(
+phil_scope = freephil.parse(
     """
 space_group = None
   .type = space_group

@@ -4,9 +4,9 @@ import six
 from six.moves import cPickle as pickle
 
 from dxtbx.format.image import ImageBool
-from iotbx.phil import parse
 
 import dials.util
+from freephil import parse
 
 help_message = """
 

@@ -10,8 +10,8 @@ import sys
 from six.moves import cStringIO as StringIO
 
 from dxtbx.model import ExperimentList
-from iotbx import phil
 
+import freephil as phil
 from dials.algorithms.merging.merge import (
     MTZDataClass,
     make_merged_mtz_file,

@@ -687,10 +687,11 @@ class StillsIndexer(Indexer):
             m.miller_index = item["miller_index"]
             matches.append(m)
 
-        import iotbx.phil
         from rstbx.phil.phil_preferences import indexing_api_defs
 
-        hardcoded_phil = iotbx.phil.parse(input_string=indexing_api_defs).extract()
+        import freephil
+
+        hardcoded_phil = freephil.parse(input_string=indexing_api_defs).extract()
 
         from rstbx.indexing_api.outlier_procedure import OutlierPlotPDF
 

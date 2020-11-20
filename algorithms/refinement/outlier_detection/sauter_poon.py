@@ -58,10 +58,11 @@ class SauterPoon(CentroidOutlier):
             m.x_calc = calc[0] * self._px_sz[0]
             m.y_calc = calc[1] * self._px_sz[1]
 
-        import iotbx.phil
         from rstbx.phil.phil_preferences import indexing_api_defs
 
-        hardcoded_phil = iotbx.phil.parse(input_string=indexing_api_defs).extract()
+        import freephil
+
+        hardcoded_phil = freephil.parse(input_string=indexing_api_defs).extract()
 
         # set params into the hardcoded_phil
         hardcoded_phil.indexing.outlier_detection.verbose = self._verbose

@@ -2,9 +2,9 @@ from __future__ import absolute_import, division, print_function
 
 from cctbx import uctbx
 from cctbx.miller import index_generator
-from iotbx.phil import parse
 
 from dials.array_family import flex
+from freephil import parse
 
 # The phil scope
 phil_scope = parse(

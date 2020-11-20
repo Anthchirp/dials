@@ -7,11 +7,10 @@ from __future__ import absolute_import, division, print_function
 
 from orderedset import OrderedSet
 
-import iotbx.phil
-
+import freephil
 from dials.array_family import flex
 
-phil_scope = iotbx.phil.parse(
+phil_scope = freephil.parse(
     """
   exclude_images = None
     .type = strings

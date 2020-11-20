@@ -8,7 +8,6 @@ import math
 import random
 import sys
 
-import iotbx.phil
 from cctbx import sgtbx, uctbx
 from cctbx.sgtbx.bravais_types import bravais_lattice
 from cctbx.sgtbx.lattice_symmetry import metric_subgroups
@@ -16,6 +15,7 @@ from dxtbx.model import ExperimentList
 from libtbx import Auto
 
 import dials.util
+import freephil
 from dials.algorithms.merging.merge import prepare_merged_reflection_table
 from dials.algorithms.symmetry import resolution_filter_from_reflections_experiments
 from dials.algorithms.symmetry.absences.laue_groups_info import (
@@ -43,7 +43,7 @@ from dials.util.version import dials_version
 
 logger = logging.getLogger("dials.command_line.symmetry")
 
-phil_scope = iotbx.phil.parse(
+phil_scope = freephil.parse(
     """\
 include scope dials.util.exclude_images.phil_scope
 d_min = Auto

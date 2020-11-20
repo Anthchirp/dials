@@ -6,12 +6,12 @@ import sys
 
 import numpy as np
 
-import iotbx.phil
 from cctbx import uctbx
 from dxtbx.model.experiment_list import ExperimentListFactory
 from scitbx.math import five_number_summary
 
 import dials.util
+import freephil
 from dials.array_family import flex
 from dials.util import Sorry, tabulate
 
@@ -26,7 +26,7 @@ Examples::
   dials.show observations.refl
 """
 
-phil_scope = iotbx.phil.parse(
+phil_scope = freephil.parse(
     """\
 show_scan_varying = False
   .type = bool

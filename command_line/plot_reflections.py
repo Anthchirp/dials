@@ -1,11 +1,10 @@
 from __future__ import absolute_import, division, print_function
 
-import iotbx.phil
-
 import dials.util
+import freephil
 from dials.util import Sorry
 
-master_phil_scope = iotbx.phil.parse(
+master_phil_scope = freephil.parse(
     """
 scan_range = None
   .help = "The range of images to use in indexing. Number of arguments"

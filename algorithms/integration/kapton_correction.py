@@ -2,9 +2,9 @@ from __future__ import absolute_import, division, print_function
 
 import math
 
-from iotbx import phil
 from scitbx import matrix
 
+import freephil as phil
 from dials.algorithms.shoebox import MaskCode
 from dials.array_family import flex
 

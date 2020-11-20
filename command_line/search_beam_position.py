@@ -8,7 +8,6 @@ import logging
 import math
 import random
 
-import iotbx.phil
 import libtbx.introspection
 from libtbx.test_utils import approx_equal
 from libtbx.utils import plural_s
@@ -21,6 +20,7 @@ from scitbx.array_family import flex
 from scitbx.simplex import simplex_opt
 
 import dials.util
+import freephil
 from dials.algorithms.indexing.indexer import find_max_cell
 from dials.util import Sorry, log
 from dials.util.options import OptionParser, reflections_and_experiments_from_files
@@ -38,7 +38,7 @@ Examples::
   dials.search_beam_position imported.expt strong.refl
 """
 
-phil_scope = iotbx.phil.parse(
+phil_scope = freephil.parse(
     """
 nproc = Auto
   .type = int(value_min=1)
@@ -310,7 +310,7 @@ def run_dps(experiment, spots_mm, max_cell):
     # max_cell: max possible cell in Angstroms; set to None, determine from data
     # recommended_grid_sampling_rad: grid sampling in radians; guess for now
 
-    horizon_phil = iotbx.phil.parse(input_string=indexing_api_defs).extract()
+    horizon_phil = freephil.parse(input_string=indexing_api_defs).extract()
     DPS = DPS_primitive_lattice(
         max_cell=max_cell, recommended_grid_sampling_rad=None, horizon_phil=horizon_phil
     )

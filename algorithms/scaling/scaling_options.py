@@ -3,9 +3,9 @@ Phil scope of options for scaling.
 """
 from __future__ import absolute_import, division, print_function
 
-import iotbx.phil
+import freephil
 
-phil_scope = iotbx.phil.parse(
+phil_scope = freephil.parse(
     """
   anomalous = False
     .type = bool

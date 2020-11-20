@@ -2,9 +2,8 @@ from __future__ import absolute_import, division, print_function
 
 import sys
 
-import iotbx.phil
-
 import dials.util
+import freephil
 
 help_message = """
 
@@ -16,7 +15,7 @@ Examples::
   dials.convert_to_cbf models.expt prefix=data_as_cbf
 """
 
-phil_scope = iotbx.phil.parse(
+phil_scope = freephil.parse(
     """\
 output {
   template = as_cbf_%04d.cbf

@@ -11,10 +11,10 @@ from dxtbx.masking import (
     mask_untrusted_polygon,
     mask_untrusted_rectangle,
 )
-from iotbx.phil import parse
 
 from dials.array_family import flex
 from dials.util.ext import ResolutionMaskGenerator
+from freephil import parse
 
 logger = logging.getLogger(__name__)
 

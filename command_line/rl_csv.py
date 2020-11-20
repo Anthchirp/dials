@@ -6,13 +6,13 @@ import io
 
 import six
 
-import iotbx.phil
 from dxtbx.model import ExperimentList
 
 import dials.util
+import freephil
 from dials.util.options import OptionParser, reflections_and_experiments_from_files
 
-phil_scope = iotbx.phil.parse(
+phil_scope = freephil.parse(
     """
 output {
   csv = rl.csv

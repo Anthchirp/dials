@@ -5,9 +5,9 @@ from __future__ import absolute_import, division, print_function
 
 import math
 
-import iotbx.phil
 from scitbx.array_family import flex
 
+import freephil
 from dials.algorithms.spot_finding.factory import SpotFinderFactory
 from dials.algorithms.spot_finding.factory import phil_scope as spot_phil
 from dials.util import Sorry, show_mail_handle_errors
@@ -21,7 +21,7 @@ Examples::
   dials.background imported.expt
 """
 
-phil_scope = iotbx.phil.parse(
+phil_scope = freephil.parse(
     """\
 n_bins = 100
   .type = int

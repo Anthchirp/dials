@@ -3,9 +3,8 @@ from __future__ import absolute_import, division, print_function
 import binascii
 import sys
 
-import iotbx.phil
-
 import dials.util
+import freephil
 
 help_message = """
 
@@ -22,7 +21,7 @@ Examples::
   dials.merge_cbf image_*.cbf merge_n_images=10
 """
 
-phil_scope = iotbx.phil.parse(
+phil_scope = freephil.parse(
     """\
 merge_n_images = 2
   .type = int(value_min=1)

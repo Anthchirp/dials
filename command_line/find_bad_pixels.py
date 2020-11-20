@@ -6,10 +6,10 @@ import concurrent.futures
 import math
 import sys
 
-import iotbx.phil
 from scitbx.array_family import flex
 
 import dials.util
+import freephil
 from dials.algorithms.spot_finding.factory import SpotFinderFactory
 from dials.algorithms.spot_finding.factory import phil_scope as spot_phil
 from dials.util.options import OptionParser, flatten_experiments
@@ -22,7 +22,7 @@ Examples::
 
 """
 
-phil_scope = iotbx.phil.parse(
+phil_scope = freephil.parse(
     """
 images = None
   .type = ints
@@ -96,7 +96,7 @@ def find_constant_signal_pixels(imageset, images):
         data = data.as_double()
 
         spot_params = spot_phil.fetch(
-            source=iotbx.phil.parse("min_spot_size=1")
+            source=freephil.parse("min_spot_size=1")
         ).extract()
         threshold_function = SpotFinderFactory.configure_threshold(spot_params)
         peak_pixels = threshold_function.compute_threshold(data, ~bad)

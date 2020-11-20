@@ -9,10 +9,10 @@ from math import exp, log
 
 import six
 
-from iotbx import phil
 from scitbx import sparse
 from scitbx.math.distributions import normal_distribution
 
+import freephil as phil
 from dials.array_family import flex
 from dials.util import tabulate
 

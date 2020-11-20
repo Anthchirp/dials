@@ -3,9 +3,8 @@ from __future__ import absolute_import, division, print_function
 import json
 import sys
 
-import iotbx.phil
-
 import dials.util
+import freephil
 from dials.algorithms.spot_finding import per_image_analysis
 from dials.util import tabulate
 from dials.util.options import OptionParser, reflections_and_experiments_from_files
@@ -23,7 +22,7 @@ Examples::
   dials.spot_counts_per_image imported.expt strong.refl plot=per_image.png
 """
 
-phil_scope = iotbx.phil.parse(
+phil_scope = freephil.parse(
     """\
 resolution_analysis = True
   .type = bool

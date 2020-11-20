@@ -3,13 +3,13 @@ from __future__ import absolute_import, division, print_function
 import logging
 import math
 
-import iotbx.phil
 from cctbx import sgtbx
 from cctbx.crystal import symmetry as crystal_symmetry
 from cctbx.miller import set as miller_set
 from cctbx.sgtbx import space_group as sgtbx_space_group
 from libtbx.utils import format_float_with_standard_uncertainty
 
+import freephil
 from dials.algorithms.symmetry import origin
 from dials.array_family import flex
 from dials.util import log, show_mail_handle_errors
@@ -35,7 +35,7 @@ Examples::
     grid_l=3 symop_threshold=0.7
 """
 
-phil_scope = iotbx.phil.parse(
+phil_scope = freephil.parse(
     """
 d_min = 0
   .type = float

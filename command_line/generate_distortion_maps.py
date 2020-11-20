@@ -5,9 +5,9 @@ import math
 
 import six.moves.cPickle as pickle
 
-from iotbx import phil
 from scitbx import matrix
 
+import freephil as phil
 from dials.array_family import flex
 from dials.util import Sorry, log, show_mail_handle_errors
 from dials.util.options import OptionParser, flatten_experiments

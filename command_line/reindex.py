@@ -9,11 +9,11 @@ import sys
 
 import six.moves.cPickle as pickle
 
-import iotbx.phil
 from cctbx import sgtbx
 from rstbx.symmetry.constraints import parameter_reduction
 
 import dials.util
+import freephil
 from dials.algorithms.indexing.assign_indices import AssignIndicesGlobal
 from dials.array_family import flex
 from dials.util.filter_reflections import filtered_arrays_from_experiments_reflections
@@ -45,7 +45,7 @@ Examples::
     reference.reflections=reference.refl
 """
 
-phil_scope = iotbx.phil.parse(
+phil_scope = freephil.parse(
     """
 change_of_basis_op = a,b,c
   .type = str

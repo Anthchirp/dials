@@ -1,8 +1,8 @@
 from __future__ import absolute_import, division, print_function
 
-import iotbx.phil
 from scitbx.array_family import flex
 
+import freephil
 from dials.util import Sorry, show_mail_handle_errors
 from dials.util.options import OptionParser, flatten_experiments
 
@@ -20,7 +20,7 @@ Examples::
   dials.estimate_gain models.expt
 """
 
-phil_scope = iotbx.phil.parse(
+phil_scope = freephil.parse(
     """\
   kernel_size = 10,10
     .type = ints(size=2, value_min=1)

@@ -49,12 +49,13 @@ class FFT1D(Strategy):
             A tuple containing the list of basis vectors and a flex.bool array
             identifying which reflections were used in indexing.
         """
-        import iotbx.phil
         from rstbx.phil.phil_preferences import indexing_api_defs
+
+        import freephil
 
         used_in_indexing = flex.bool(reciprocal_lattice_vectors.size(), True)
 
-        hardcoded_phil = iotbx.phil.parse(input_string=indexing_api_defs).extract()
+        hardcoded_phil = freephil.parse(input_string=indexing_api_defs).extract()
 
         # Spot_positions: Centroid positions for spotfinder spots, in pixels
         # Return value: Corrected for parallax, converted to mm

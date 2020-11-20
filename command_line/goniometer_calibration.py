@@ -1,9 +1,9 @@
 from __future__ import absolute_import, division, print_function
 
-import iotbx.phil
 from scitbx import matrix
 
 import dials.util
+import freephil
 
 help_message = """
 dials.goniometer_calibration is a tool to aid calibration of multi-axis
@@ -26,7 +26,7 @@ dials.goniometer_calibration space_group=P422 \\
 """
 
 
-phil_scope = iotbx.phil.parse(
+phil_scope = freephil.parse(
     """
 space_group = None
   .type = space_group
