@@ -1,10 +1,10 @@
 import os
 
+import freephil
+
 from libtbx import Auto
 from libtbx.test_utils import Exception_expected, show_diff
 from libtbx.utils import Sorry
-
-import freephil
 
 
 def test_all():

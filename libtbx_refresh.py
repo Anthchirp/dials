@@ -39,9 +39,9 @@ libtbx.pkg_utils.define_entry_points(
             "dispersion_extended = dials.extensions.dispersion_extended_spotfinder_threshold_ext:DispersionExtendedSpotFinderThresholdExt",
         ],
         "freephil.converter": [
-            "unit_cell_converter = dials.freephil.plugins:unit_cell_converter",
-            "space_group_converter = dials.freephil.plugins:space_group_converter",
-            "atom_selection_converter = dials.freephil.plugins:atom_selection_converter",
+            "unit_cell_converter = dials.util.freephil_plugins:unit_cell_converter",
+            "space_group_converter = dials.util.freephil_plugins:space_group_converter",
+            "atom_selection_converter = dials.util.freephil_plugins:atom_selection_converter",
         ],
     }
 )

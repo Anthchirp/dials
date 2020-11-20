@@ -1,13 +1,13 @@
 import os
 
+import freephil.command_line
+import freephil.converters
+from freephil import tokenizer
+
 from cctbx import sgtbx, uctbx
 from iotbx import file_reader
 from libtbx import Auto
 from libtbx.utils import Usage
-
-import freephil.command_line
-import freephil.converters
-from freephil import tokenizer
 
 
 class unit_cell_converter:
