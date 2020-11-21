@@ -1,13 +1,15 @@
 import os
 
 import freephil
+import pytest
 
-from libtbx import Auto
-from libtbx.test_utils import Exception_expected, show_diff
+from iotbx.file_reader import any_file
 from libtbx.utils import Sorry
 
+from dials.util.freephil_plugins import process_command_line_with_files
 
-def test_all():
+
+def test_1():
     master = freephil.parse(
         input_string="""\
 u=10,12 13 80,90 100
@@ -24,16 +26,16 @@ sa=Auto
   .type=space_group
 """
     )
-    assert not show_diff(
-        master.format(master.extract()).as_str(),
-        """\
+    assert (
+        master.format(master.extract()).as_str()
+        == """\
 u = 10 12 13 80 90 100
 s = "P 21 21 21"
 U = None
 S = None
 ua = Auto
 sa = Auto
-""",
+"""
     )
     custom = freephil.parse(
         input_string="""\
@@ -45,16 +47,16 @@ S = 33
 sa = None
 """
     )
-    assert not show_diff(
-        master.fetch(source=custom).extract_format().as_str(),
-        """\
+    assert (
+        master.fetch(source=custom).extract_format().as_str()
+        == """\
 u = Auto
 s = Auto
 U = 1 2 3 90 90 90
 S = "P n a 21"
 ua = None
 sa = None
-""",
+"""
     )
     # make sure Unicode strings work!
     custom = freephil.parse(
@@ -63,18 +65,20 @@ U = 1 2 3 90 105 90
 S = P21
 """
     )
-    assert not show_diff(
-        master.fetch(source=custom).extract_format().as_str(),
-        """\
+    assert (
+        master.fetch(source=custom).extract_format().as_str()
+        == """\
 u = 10 12 13 80 90 100
 s = "P 21 21 21"
 U = 1 2 3 90 105 90
 S = "P 1 21 1"
 ua = Auto
 sa = Auto
-""",
+"""
     )
-    #
+
+
+def test_2():
     master = freephil.parse(
         input_string="""\
 s=None
@@ -88,23 +92,18 @@ s=p212121
 s=19
 """
     )
-    assert not show_diff(
-        master.fetch(source=custom).as_str(),
-        """\
-s = 19
-""",
-    )
+    assert master.fetch(source=custom).as_str() == "s = 19\n"
     custom = freephil.parse(
         input_string="""\
 s=19
 s=p212121
 """
     )
-    assert not show_diff(
-        master.fetch(source=custom).as_str(),
-        """\
+    assert (
+        master.fetch(source=custom).as_str()
+        == """\
 s = p212121
-""",
+"""
     )
     custom = freephil.parse(
         input_string="""\
@@ -112,14 +111,16 @@ s=18
 s=p212121
 """
     )
-    assert not show_diff(
-        master.fetch(source=custom).as_str(),
-        """\
+    assert (
+        master.fetch(source=custom).as_str()
+        == """\
 s = 18
 s = p212121
-""",
+"""
     )
-    #
+
+
+def test_3():
     master = freephil.parse(
         input_string="""\
 sel = None
@@ -128,11 +129,11 @@ sel = None
 """
     )
     clai = master.command_line_argument_interpreter()
-    assert not show_diff(
-        clai.process("sel=altloc  ' ' or  name C\\* ").as_str(),
-        """\
+    assert (
+        clai.process("sel=altloc  ' ' or  name C\\* ").as_str()
+        == """\
 sel = altloc ' ' or name C\\*
-""",
+"""
     )
     user = freephil.parse(
         input_string="""\
@@ -141,18 +142,20 @@ sel = altloc ' ' or name D\\*
 """
     )
     work = master.fetch(user)
-    assert not show_diff(
-        work.as_str(),
-        """\
+    assert (
+        work.as_str()
+        == """\
 sel = "altloc ' ' or name C\\\\*"
 sel = altloc ' ' or name D\\*
-""",
+"""
     )
     ex = work.extract()
     assert len(ex.sel) == 2
     assert ex.sel[0] == "altloc ' ' or name C\\*"
     assert ex.sel[1] == "altloc ' ' or name D\\*"
-    #
+
+
+def test_4():
     pcl = freephil.process_command_line(
         args=["s = 230"],
         master_string="""\
@@ -160,22 +163,23 @@ s=None
   .type=space_group
 """,
     )
-    assert not show_diff(str(pcl.work.extract().s), "I a -3 d")
-    #
+    assert str(pcl.work.extract().s) == "I a -3 d"
+
+
+def test_5(tmp_path):
     master_phil_str = """
 model = None
   .type = path
 use_geometry_restraints = False
   .type = bool
 """
-    with open("model.pdb", "w") as f:
-        f.write(
-            """\
+    tmp_path.joinpath("model.pdb").write_text(
+        """\
 ATOM      1  O   HOH     1      53.448  18.599 -10.134  1.00 20.00
 """
-        )
-    pcl = freephil.process_command_line_with_files(
-        args=["model.pdb", "--use_geometry_restraints"],
+    )
+    pcl = process_command_line_with_files(
+        args=[str(tmp_path / "model.pdb"), "--use_geometry_restraints"],
         master_phil_string=master_phil_str,
         pdb_file_def="model",
     )
@@ -184,9 +188,12 @@ ATOM      1  O   HOH     1      53.448  18.599 -10.134  1.00 20.00
     params = pcl.work.extract()
     pdb_in = pcl.get_cached_file(params.model)
     assert pdb_in is not None
-    assert params.model == os.path.join(os.getcwd(), "model.pdb")
+    assert params.model == str(tmp_path / "model.pdb")
     assert params.use_geometry_restraints
-    model_in = pcl.get_file(params.model, force_type="pdb")
+    pcl.get_file(params.model, force_type="pdb")
+
+
+def test_6():
     master_phil_str = """
 data_dir = None
   .type = path
@@ -195,7 +202,7 @@ d_min = None
 nproc = None
   .type = int
 """
-    pcl = freephil.process_command_line_with_files(
+    pcl = process_command_line_with_files(
         args=["/", "3.0", "5"],
         master_phil_string=master_phil_str,
         directory_def="data_dir",
@@ -206,16 +213,18 @@ nproc = None
     assert params.data_dir == "/"
     assert params.d_min == 3.0
     assert params.nproc == 5
+
+
+def test_7(tmp_path):
     # shelx file hack
-    with open("tst_freephil.hkl", "w") as f:
-        f.write(
-            """\
+    tmp_path.joinpath("tst_freephil.hkl").write_text(
+        """\
    1   2  -1  -23.34    4.56   1
    2  -3   9   12.45    6.12   2
 99999999999999999.9999999.999999
 -999-999-999-9999.99-9999.99-999
    0   0   0    0.00    0.00   0"""
-        )
+    )
     master_phil_str = """
 data = None
   .type = path
@@ -224,9 +233,9 @@ space_group = None
 unit_cell = None
   .type = unit_cell
 """
-    pcl = freephil.process_command_line_with_files(
+    pcl = process_command_line_with_files(
         args=[
-            "tst_freephil.hkl",
+            str(tmp_path / "tst_freephil.hkl"),
             "P6122",
             "50,50,40,90,90,120",
         ],
@@ -238,30 +247,26 @@ unit_cell = None
     params = pcl.work.extract()
     assert str(params.space_group) == "P 61 2 2"
     assert str(params.unit_cell) == "(50, 50, 40, 90, 90, 120)"
-    from iotbx.file_reader import any_file
-
-    try:
+    with pytest.raises(Sorry, match="Unresolved amplitude/intensity ambiguity"):
         hkl_in = any_file(params.data, force_type="hkl")
         print(hkl_in.file_server.miller_arrays[0].is_xray_intensity_array())
-    except Sorry as s:
-        assert "Unresolved amplitude/intensity ambiguity" in str(s)
-    else:
-        raise Exception_expected
-    pcl = freephil.process_command_line_with_files(
-        args=["tst_freephil.hkl=hklf3"],
+
+    pcl = process_command_line_with_files(
+        args=[str(tmp_path / "tst_freephil.hkl") + "=hklf3"],
         master_phil_string=master_phil_str,
         reflection_file_def="data",
     )
     params = pcl.work.extract()
-    assert params.data == "tst_freephil.hkl=hklf3"
+    assert params.data == str(tmp_path / "tst_freephil.hkl") + "=hklf3"
     hkl_in = any_file(params.data, force_type="hkl")
     ma = hkl_in.file_server.miller_arrays[0]
     assert ma.is_xray_amplitude_array()
     assert ma.anomalous_flag() is False
 
-    with open("tst_freephil.ncs", "w") as f:
-        f.write(
-            """
+
+def test_8(tmp_path):
+    tmp_path.joinpath("tst_freephil.ncs").write_text(
+        """
 REMARK 350   BIOMT1   1  1.000000  0.000000  0.000000        0.00000
 REMARK 350   BIOMT2   1  0.000000  1.000000  0.000000        0.00000
 REMARK 350   BIOMT3   1  0.000000  0.000000  1.000000        0.00000
@@ -270,14 +275,14 @@ REMARK 350   BIOMT2   2 -0.781831  0.623490  0.000000        0.00000
 REMARK 350   BIOMT3   2  0.000000  0.000000  1.000000        0.00000
 
 """
-        )
+    )
     master_phil_str = """
 ncs_file = None
   .type = path
 """
-    pcl = freephil.process_command_line_with_files(
+    pcl = process_command_line_with_files(
         args=[
-            "tst_freephil.ncs",
+            str(tmp_path / "tst_freephil.ncs"),
         ],
         master_phil_string=master_phil_str,
         ncs_file_def="ncs_file",
@@ -285,9 +290,10 @@ ncs_file = None
     params = pcl.work.extract()
     assert os.path.split(str(params.ncs_file))[-1] == "tst_freephil.ncs"
 
-    with open("tst_freephil.ncs_spec", "w") as f:
-        f.write(
-            """
+
+def test_9(tmp_path):
+    tmp_path.joinpath("tst_freephil.ncs_spec").write_text(
+        """
 Summary of NCS information
 Wed Mar 16 15:02:22 2016
 /Users/terwill/Desktop/working/Jan_2015/phenix/cryo-pdb/3j9c/build
@@ -314,14 +320,14 @@ rota_matrix   -0.0000    0.0000    1.0000
 tran_orth     0.0000    0.0000    0.0000
 
 """
-        )
+    )
     master_phil_str = """
 ncs_file = None
   .type = path
 """
-    pcl = freephil.process_command_line_with_files(
+    pcl = process_command_line_with_files(
         args=[
-            "tst_freephil.ncs_spec",
+            str(tmp_path / "tst_freephil.ncs_spec"),
         ],
         master_phil_string=master_phil_str,
         ncs_file_def="ncs_file",

@@ -55,7 +55,6 @@ class space_group_converter:
 
 
 class atom_selection_converter(freephil.converters.qstr_converters):
-
     phil_type = "atom_selection"
 
     def __str__(self):
@@ -67,64 +66,6 @@ class atom_selection_converter(freephil.converters.qstr_converters):
             if word.quote_token is not None:
                 return word.value  # mainly for backward compatibility
         return freephil.qstr_converters.from_words(self, words, master)
-
-
-# default_converter_registry = freephil.extended_converter_registry(
-#    additional_converters=[
-##        unit_cell_converter,
-#        space_group_converter,
-#        atom_selection_converter,
-#    ]
-# )
-
-
-def _parse(
-    input_string=None,
-    source_info=None,
-    file_name=None,
-    converter_registry=None,
-    process_includes=False,
-):
-    if converter_registry is None:
-        converter_registry = default_converter_registry
-    return freephil.parse(
-        input_string=input_string,
-        source_info=source_info,
-        file_name=file_name,
-        converter_registry=converter_registry,
-        process_includes=process_includes,
-    )
-
-
-def _parse(*args, **kwargs):
-    return freephil.parse(*args, **kwargs)
-
-
-parse = _parse
-
-
-def read_default(
-    caller_file_name,
-    params_extension=".params",
-    converter_registry=None,
-    process_includes=True,
-):
-    if converter_registry is None:
-        converter_registry = default_converter_registry
-    return freephil.read_default(
-        caller_file_name=caller_file_name,
-        params_extension=params_extension,
-        converter_registry=converter_registry,
-        process_includes=process_includes,
-    )
-
-
-def process_command_line(args, master_string, parse=None):
-    if parse is None:
-        parse = _parse
-    return freephil.process_command_line(
-        args=args, master_string=master_string, parse=parse
-    )
 
 
 class process_command_line_with_files:
@@ -150,7 +91,9 @@ class process_command_line_with_files:
         assert (master_phil is not None) or (master_phil_string is not None)
         if master_phil_string is not None:
             assert master_phil is None
-            master_phil = _parse(input_string=master_phil_string, process_includes=True)
+            master_phil = freephil.parse(
+                input_string=master_phil_string, process_includes=True
+            )
         if usage_string is not None:
             if (len(args) == 0) or ("--help" in args):
                 raise Usage(
